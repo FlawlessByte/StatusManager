@@ -24,7 +24,7 @@ public class MediaFiles {
         for (int i = 0; i < files.length; i++)
         {
             allFiles.add(files[i].getName());
-            if(files[i].getName().endsWith(".jpg")){
+            if(files[i].getName().endsWith(".jpg") || files[i].getName().endsWith(".gif") ){
                 imageFiles.add(files[i].getName());
             }
             else if(files[i].getName().endsWith(".mp4")){

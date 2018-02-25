@@ -4,6 +4,7 @@ package co.realinventor.statusmanager.pageradapters;
  * Created by JIMMY on 22-Feb-18.
  */
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -26,9 +27,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         switch (position){
             case 0:
-                return new PlaceholderFragment();
+                Bundle args1 = new Bundle();
+                args1.putInt("TYPE_MEDIA",PlaceholderFragment.FILE_IMAGE);
+                PlaceholderFragment fragment1 = new PlaceholderFragment();
+                fragment1.setArguments(args1);
+                return fragment1;
             case 1:
-                return new PlaceholderFragment();
+                Bundle args2 = new Bundle();
+                args2.putInt("TYPE_MEDIA",PlaceholderFragment.FILE_VIDEO);
+                PlaceholderFragment fragment2 = new PlaceholderFragment();
+                fragment2.setArguments(args2);
+                return fragment2;
             default:
                 return null;
         }

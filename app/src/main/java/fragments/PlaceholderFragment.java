@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.io.File;
@@ -28,32 +29,26 @@ import co.realinventor.statusmanager.R;
 import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
+import helpers.Videos;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class PlaceholderFragment extends Fragment {
 
+    public static final int FILE_VIDEO = 100;
+    public static final int FILE_IMAGE = 101;
+    private int MEDIA_TYPE ;
+
 //    private String TAG = getClass().getSimpleName();
 //    private static final String endpoint = "https://api.androidhive.info/json/glide.json";
     private ArrayList<Image> images;
+    private ArrayList<Videos> videos;
 
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
 
     public PlaceholderFragment() {}
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
 
 
 
@@ -62,12 +57,29 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
 
+        MEDIA_TYPE = getArguments().getInt("TYPE_MEDIA");
+        Log.d("TYPE_MEDIA ", ""+MEDIA_TYPE);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
-        images = new ArrayList<>();
-        mAdapter = new GalleryAdapter(getActivity(), images);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        if(MEDIA_TYPE == FILE_IMAGE){
+            images = new ArrayList<>();
+            mAdapter = new GalleryAdapter(getActivity(), images);
+        }
+
+        if(MEDIA_TYPE == FILE_VIDEO){
+            videos = new ArrayList<>();
+            mAdapter = new GalleryAdapter(videos, getActivity());
+        }
+
+
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+
+        if(MEDIA_TYPE == FILE_VIDEO){
+            mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        }
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -76,14 +88,30 @@ public class PlaceholderFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("images", images);
-                bundle.putInt("position", position);
+                if(MEDIA_TYPE == FILE_IMAGE){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("MEDIA_TYPE",101);
+                    bundle.putSerializable("images", images);
+                    bundle.putInt("position", position);
 
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
-                newFragment.setArguments(bundle);
-                newFragment.show(ft, "slideshow");
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                    newFragment.setArguments(bundle);
+                    newFragment.show(ft, "slideshow");
+                }
+                else{
+                    Log.d("Note me ", "ENtered  else");
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("MEDIA_TYPE",100);
+                    bundle.putSerializable("videos", videos);
+                    bundle.putInt("position", position);
+
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                    newFragment.setArguments(bundle);
+                    newFragment.show(ft, "slideshow");
+                }
+
             }
 
             @Override
@@ -103,7 +131,15 @@ public class PlaceholderFragment extends Fragment {
 
     private void processImages(){
 
-        ArrayList<String> imgs = MediaFiles.getImageFiles();
+        ArrayList<String> fils;
+
+        if(MEDIA_TYPE == FILE_IMAGE){
+            fils = MediaFiles.getImageFiles();
+        }
+        else{
+            fils = MediaFiles.getVideoFiles();
+        }
+
 
         String PATH = Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses/";
 
@@ -112,17 +148,28 @@ public class PlaceholderFragment extends Fragment {
         android.text.format.DateFormat df = new android.text.format.DateFormat();
 
 
-        for (String i:imgs){
+        for (String i:fils){
             Image image = new Image();
-            //image.setName(i);
+            Videos video = new Videos();
             File file = new File(PATH+i);
             Date date = new Date(file.lastModified());
-            image.setTimestamp(df.format("hh:mm:ss a | dd MMMM, yyyy",date).toString());
 
-            //change method to setSIze()
-            image.setName(String.format("%.02f",(file.length()/1024.0))+" KB");
-            image.setLarge(PATH+i);
-            images.add(image);
+
+            if(MEDIA_TYPE == FILE_IMAGE) {
+                image.setTimestamp(df.format("hh:mm:ss a | dd MMMM, yyyy", date).toString());
+                //change method to setSIze()
+                image.setName(String.format("%.02f", (file.length() / 1024.0)) + " KB");
+                image.setLarge(PATH + i);
+                images.add(image);
+            }
+            if(MEDIA_TYPE == FILE_VIDEO){
+                video.setTimestamp(df.format("hh:mm:ss a | dd MMMM, yyyy", date).toString());
+                //change method to setSIze()
+                video.setName(String.format("%.02f", (file.length() / 1024.0)) + " KB");
+                video.setLarge(PATH + i);
+                videos.add(video);
+            }
+
         }
     }
 }

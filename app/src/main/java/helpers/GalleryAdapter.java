@@ -18,13 +18,17 @@ import java.util.List;
 
 import co.realinventor.statusmanager.R;
 
+
 /**
  * Created by JIMMY on 15-Feb-18.
  */
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
+
+    private boolean isImage;
     private List<Image> images;
+    private List<Videos> videos;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,6 +44,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     public GalleryAdapter(Context context, List<Image> images) {
         mContext = context;
         this.images = images;
+        isImage = true;
+    }
+
+    public GalleryAdapter(List<Videos> videos, Context context) {
+        mContext = context;
+        this.videos = videos;
+        isImage = false;
     }
 
     @Override
@@ -52,18 +63,35 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Image image = images.get(position);
 
-        Glide.with(mContext).load(Uri.fromFile(new File(image.getLarge())))
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.thumbnail);
+        if(isImage){
+            Image image = images.get(position);
+
+            Glide.with(mContext).load(Uri.fromFile(new File(image.getLarge())))
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.thumbnail);
+
+        }
+        else{
+            Videos video = videos.get(position);
+
+            Glide.with(mContext).load(Uri.fromFile(new File(video.getLarge())))
+                    .thumbnail(0.5f)
+                    .into(holder.thumbnail);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
+        if(isImage){
+            return images.size();
+        }
+        else{
+            return videos.size();
+        }
+
     }
 
     public interface ClickListener {

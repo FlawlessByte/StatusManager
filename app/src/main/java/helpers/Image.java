@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 public class Image implements Serializable {
-    private String name;
+    private String size;
     private String large;
     private String timestamp;
 
@@ -16,22 +16,22 @@ public class Image implements Serializable {
     }
 
     public Image(String name, String large){
-        this.name = name;
+        this.size = name;
         this.large = large;
     }
 
     public Image(String name, String large, String timestamp) {
-        this.name = name;
+        this.size = name;
         this.large = large;
         this.timestamp = timestamp;
     }
 
     public String getName() {
-        return name;
+        return size;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.size = name;
     }
 
     public String getLarge() {
