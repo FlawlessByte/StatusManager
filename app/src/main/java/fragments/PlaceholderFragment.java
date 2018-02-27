@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 
 import java.io.File;
-import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import co.realinventor.statusmanager.R;
@@ -62,7 +62,6 @@ public class PlaceholderFragment extends Fragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
-
         if(MEDIA_TYPE == FILE_IMAGE){
             images = new ArrayList<>();
             mAdapter = new GalleryAdapter(getActivity(), images);
@@ -72,8 +71,6 @@ public class PlaceholderFragment extends Fragment {
             videos = new ArrayList<>();
             mAdapter = new GalleryAdapter(videos, getActivity());
         }
-
-
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
 
@@ -116,12 +113,18 @@ public class PlaceholderFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-
+                Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT);
             }
         }));
 
 
         processImages();
+        if(MEDIA_TYPE == FILE_IMAGE) {
+            Collections.sort(images, Image.dateComparator);
+        }
+        else {
+            Collections.sort(videos, Videos.dateComparator);
+        }
         mAdapter.notifyDataSetChanged();
 
         return rootView;
@@ -158,15 +161,17 @@ public class PlaceholderFragment extends Fragment {
             if(MEDIA_TYPE == FILE_IMAGE) {
                 image.setTimestamp(df.format("hh:mm:ss a | dd MMMM, yyyy", date).toString());
                 //change method to setSIze()
-                image.setName(String.format("%.02f", (file.length() / 1024.0)) + " KB");
+                image.setSize(String.format("%.02f", (file.length() / 1024.0)) + " KB");
                 image.setLarge(PATH + i);
+                image.setTime(new Date(file.lastModified()));
                 images.add(image);
             }
             if(MEDIA_TYPE == FILE_VIDEO){
                 video.setTimestamp(df.format("hh:mm:ss a | dd MMMM, yyyy", date).toString());
                 //change method to setSIze()
-                video.setName(String.format("%.02f", (file.length() / 1024.0)) + " KB");
+                video.setSize(String.format("%.02f", ((file.length() / 1024.0) / 1024.0)) + " MB");
                 video.setLarge(PATH + i);
+                video.setTime(new Date(file.lastModified()));
                 videos.add(video);
             }
 

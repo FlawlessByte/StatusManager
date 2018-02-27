@@ -21,20 +21,10 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-
-//        MediaController mc= new MediaController(this);
-//
-//        VideoView videoView = (VideoView)findViewById(R.id.video_previews);
-//        mc.setAnchorView(videoView);
-//
-//        videoView.setVisibility(View.VISIBLE);
-//        String large = "/sdcard/Download/The_Chainsmokers_Coldplay_Someth.mp4";
-//        videoView.setVideoURI(Uri.parse(large));
-//        videoView.setMediaController(mc);
-//        videoView.requestFocus();
-//        videoView.start();
-
-
+        if(!MediaFiles.doesWhatsappDirExist()){
+            //Looks like the user does not have whatsapp
+            Log.e("WhatsApp folder stat", "Doesn't exist");
+        }
 
 
 

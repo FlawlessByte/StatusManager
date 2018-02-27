@@ -4,13 +4,18 @@ package helpers;
  * Created by JIMMY on 15-Feb-18.
  */
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Date;
 
 
-public class Image implements Serializable {
+public class Image implements Serializable{
     private String size;
     private String large;
     private String timestamp;
+    private Date time;
 
     public Image() {
     }
@@ -26,11 +31,19 @@ public class Image implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public String getName() {
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public String getSize() {
         return size;
     }
 
-    public void setName(String name) {
+    public void setSize(String name) {
         this.size = name;
     }
 
@@ -49,4 +62,14 @@ public class Image implements Serializable {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
+
+    public static Comparator<Image> dateComparator = new Comparator<Image>() {
+        @Override
+        public int compare(Image img1, Image img2) {
+            return (int) (img2.getTime().compareTo(img1.getTime())) ;
+        }
+    };
+
+
 }

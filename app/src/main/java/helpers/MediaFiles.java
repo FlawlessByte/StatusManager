@@ -14,11 +14,78 @@ public class MediaFiles {
     public static ArrayList<String> allFiles = new ArrayList<String>();
     public static ArrayList<String> imageFiles = new ArrayList<String>();
     public static ArrayList<String> videoFiles = new ArrayList<String>();
+    public static ArrayList<String> savedVideoFiles = new ArrayList<>();
+    public static ArrayList<String> savedImageFiles = new ArrayList<>();
+    private static String APP_FOLDER_NAME = "StatusManager";
 
-    //Default constructor to initialise allFiles, imageFiles, videoFiles
+
+    public static void initSavedFiles(){
+        File directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Videos");
+
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            if(files[i].getName().endsWith(".mp4")){
+                savedVideoFiles.add(files[i].getName());
+            }
+        }
+
+        directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Images");
+
+        files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            if(files[i].getName().endsWith(".jpg")){
+                savedImageFiles.add(files[i].getName());
+            }
+        }
+    }
+
+    public static ArrayList<String> getSavedVideoFiles(){
+        return savedVideoFiles;
+    }
+
+    public static ArrayList<String> getSavedImageFiles() {
+        return savedImageFiles;
+    }
+
+    public static boolean doesWhatsappDirExist(){
+        File dir = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
+        if(dir.exists() && dir.isDirectory()) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public static void initAppDirectrories(){
+        File dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME);
+        if(dir.exists() && dir.isDirectory()) {
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Videos");
+            if(!(dir.exists() && dir.isDirectory())) {
+                dir.mkdir();
+            }
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Images");
+            if(!(dir.exists() && dir.isDirectory())) {
+                dir.mkdir();
+            }
+        }
+        else{
+            dir.mkdir();
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Videos");
+            dir.mkdir();
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Images");
+            dir.mkdir();
+        }
+    }
+
+    //Method to initialise allFiles, imageFiles, videoFiles
     public static void initMediaFiles(){
         File directory = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
-        Log.d("Directory exists:",""+directory.exists());
+        Log.d("Directory exists:",""+doesWhatsappDirExist());
         File[] files = directory.listFiles();
         Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
@@ -52,4 +119,7 @@ public class MediaFiles {
     public static ArrayList<String> getVideoFiles() {
         return videoFiles;
     }
+
+
+
 }

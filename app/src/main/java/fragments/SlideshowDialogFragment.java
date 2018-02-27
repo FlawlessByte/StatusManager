@@ -1,6 +1,7 @@
 package fragments;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -40,6 +42,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private int MEDIA_TYPE;
 //    private ViewGroup cont;
     private MediaController mc;
+//    private VideoView videoView;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -115,13 +118,13 @@ public class SlideshowDialogFragment extends DialogFragment {
         if(MEDIA_TYPE == FILE_IMAGE){
             lblCount.setText((position + 1) + " of " + images.size());
             Image image = images.get(position);
-            lblTitle.setText(image.getName());
+            lblTitle.setText(image.getSize());
             lblDate.setText(image.getTimestamp());
         }
         else{
             lblCount.setText((position + 1) + " of " + videos.size());
             Videos video =videos.get(position);
-            lblTitle.setText(video.getName());
+            lblTitle.setText(video.getSize());
             lblDate.setText(video.getTimestamp());
         }
 
@@ -172,17 +175,26 @@ public class SlideshowDialogFragment extends DialogFragment {
 //                videoView.setVideoPath(video.getLarge());
 //                videoView.start();
 
-                mc= new MediaController(getActivity());
+//                #mc = new MediaController(getActivity());
 
                 final VideoView videoView = (VideoView) view.findViewById(R.id.video_preview);
-                mc.setAnchorView(videoView);
-
+//                #mc.setAnchorView(videoView);
                 videoView.setVisibility(View.VISIBLE);
                 Log.d("Video to be played ",video.getLarge());
                 String large = video.getLarge();
                 videoView.setVideoURI(Uri.parse(large));
-                videoView.setMediaController(mc);
+//                #videoView.setMediaController(mc);
                 videoView.requestFocus();
+
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        Log.d("On prepared ", "video prepared");
+                        mc = new MediaController(getActivity());
+                        videoView.setMediaController(mc);
+                        mc.setAnchorView(videoView);
+                    }
+                });
 
 
                 videoView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -194,6 +206,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                             videoView.pause();
                     }
                 });
+
 
                 container.addView(view);
 
