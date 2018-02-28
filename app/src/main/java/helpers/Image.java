@@ -16,6 +16,7 @@ public class Image implements Serializable{
     private String large;
     private String timestamp;
     private Date time;
+    private boolean isVideo = false;
 
     public Image() {
     }
@@ -63,6 +64,12 @@ public class Image implements Serializable{
         this.timestamp = timestamp;
     }
 
+    public boolean isVideo() {
+        return isVideo;
+    }
+    public void setIsVideo(Boolean isVideo){
+        this.isVideo = isVideo;
+    }
 
     public static Comparator<Image> dateComparator = new Comparator<Image>() {
         @Override

@@ -28,7 +28,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     private boolean isImage;
     private List<Image> images;
-    private List<Videos> videos;
+    private List<Image> videos;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,11 +47,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         isImage = true;
     }
 
-    public GalleryAdapter(List<Videos> videos, Context context) {
-        mContext = context;
-        this.videos = videos;
-        isImage = false;
-    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,7 +70,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
         }
         else{
-            Videos video = videos.get(position);
+            Image video = videos.get(position);
 
             Glide.with(mContext).load(Uri.fromFile(new File(video.getLarge())))
                     .thumbnail(0.5f)

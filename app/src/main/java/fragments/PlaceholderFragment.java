@@ -29,7 +29,6 @@ import co.realinventor.statusmanager.R;
 import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
-import helpers.Videos;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,7 +42,7 @@ public class PlaceholderFragment extends Fragment {
 //    private String TAG = getClass().getSimpleName();
 //    private static final String endpoint = "https://api.androidhive.info/json/glide.json";
     private ArrayList<Image> images;
-    private ArrayList<Videos> videos;
+    private ArrayList<Image> videos;
 
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -69,7 +68,7 @@ public class PlaceholderFragment extends Fragment {
 
         if(MEDIA_TYPE == FILE_VIDEO){
             videos = new ArrayList<>();
-            mAdapter = new GalleryAdapter(videos, getActivity());
+            mAdapter = new GalleryAdapter(getActivity(), videos);
         }
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -97,7 +96,6 @@ public class PlaceholderFragment extends Fragment {
                     newFragment.show(ft, "slideshow");
                 }
                 else{
-                    Log.d("Note me ", "ENtered  else");
                     Bundle bundle = new Bundle();
                     bundle.putInt("MEDIA_TYPE",100);
                     bundle.putSerializable("videos", videos);
@@ -123,7 +121,7 @@ public class PlaceholderFragment extends Fragment {
             Collections.sort(images, Image.dateComparator);
         }
         else {
-            Collections.sort(videos, Videos.dateComparator);
+            Collections.sort(videos, Image.dateComparator);
         }
         mAdapter.notifyDataSetChanged();
 
@@ -153,7 +151,7 @@ public class PlaceholderFragment extends Fragment {
 
         for (String i:fils){
             Image image = new Image();
-            Videos video = new Videos();
+            Image video = new Image();
             File file = new File(PATH+i);
             Date date = new Date(file.lastModified());
 

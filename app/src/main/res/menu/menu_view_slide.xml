@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="co.realinventor.statusmanager.ViewActivity">
+
+    <item
+        android:id="@+id/action_setting"
+        android:orderInCategory="100"
+        android:title="grid"
+        android:icon="@drawable/ic_action_downloaded"
+        app:showAsAction="always"/>
+</menu>

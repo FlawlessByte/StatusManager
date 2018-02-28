@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -25,13 +26,12 @@ import java.util.ArrayList;
 
 import co.realinventor.statusmanager.R;
 import helpers.Image;
-import helpers.Videos;
 
 
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<Image> images;
-    private ArrayList<Videos> videos;
+    private ArrayList<Image> videos;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -72,7 +72,7 @@ public class SlideshowDialogFragment extends DialogFragment {
             images = (ArrayList<Image>) getArguments().getSerializable("images");
         }
         else {
-            videos = (ArrayList<Videos>) getArguments().getSerializable("videos");
+            videos = (ArrayList<Image>) getArguments().getSerializable("videos");
         }
 
         selectedPosition = getArguments().getInt("position");
@@ -115,6 +115,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     private void displayMetaInfo(int position) {
 
+
         if(MEDIA_TYPE == FILE_IMAGE){
             lblCount.setText((position + 1) + " of " + images.size());
             Image image = images.get(position);
@@ -123,7 +124,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
         else{
             lblCount.setText((position + 1) + " of " + videos.size());
-            Videos video =videos.get(position);
+            Image video =videos.get(position);
             lblTitle.setText(video.getSize());
             lblDate.setText(video.getTimestamp());
         }
@@ -152,6 +153,7 @@ public class SlideshowDialogFragment extends DialogFragment {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
+
             if(MEDIA_TYPE == FILE_IMAGE){
                 PhotoView photoView = (PhotoView) view.findViewById(R.id.image_preview);
                 photoView.setVisibility(View.VISIBLE);
@@ -170,7 +172,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 //                VideoView videoView = (VideoView) view.findViewById(R.id.video_preview);
 //                videoView.setVisibility(View.VISIBLE);
 //
-                Videos video = videos.get(position);
+                Image video = videos.get(position);
 //
 //                videoView.setVideoPath(video.getLarge());
 //                videoView.start();
@@ -215,14 +217,6 @@ public class SlideshowDialogFragment extends DialogFragment {
 
             return view;
         }
-
-//        public void stopVideo(ViewGroup container){
-//            layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
-//            VideoView videoView = (VideoView) viewPager.findViewById(R.id.video_preview);
-//            videoView.stopPlayback();
-//        }
-
 
 
         @Override
