@@ -4,6 +4,10 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 /**
@@ -17,10 +21,50 @@ public class MediaFiles {
     public static ArrayList<String> savedVideoFiles = new ArrayList<>();
     public static ArrayList<String> savedImageFiles = new ArrayList<>();
     private static String APP_FOLDER_NAME = "StatusManager";
+    public static final String DOWNLOADED_IMAGE_PATH = Environment.getExternalStorageDirectory()+"/"+APP_FOLDER_NAME+"/Saved/";
 
+
+    public static void copyToDownload(String path){
+        File src = new File(path);
+        File des = new File(DOWNLOADED_IMAGE_PATH, src.getName());
+        Log.d("src file",src.getPath());
+        Log.d("des file",des.getPath());
+
+        try{
+            copyFile(src,des);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.getParentFile().exists())
+            destFile.getParentFile().mkdirs();
+
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
+        }
+    }
 
     public static void initSavedFiles(){
-        File directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Videos");
+        File directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Saved");
 
         File[] files = directory.listFiles();
         Log.d("Files", "Size: "+ files.length);
@@ -29,18 +73,11 @@ public class MediaFiles {
             if(files[i].getName().endsWith(".mp4")){
                 savedVideoFiles.add(files[i].getName());
             }
-        }
-
-        directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Images");
-
-        files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
-        {
             if(files[i].getName().endsWith(".jpg")){
                 savedImageFiles.add(files[i].getName());
             }
         }
+
     }
 
     public static ArrayList<String> getSavedVideoFiles(){
@@ -64,20 +101,14 @@ public class MediaFiles {
     public static void initAppDirectrories(){
         File dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME);
         if(dir.exists() && dir.isDirectory()) {
-            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Videos");
-            if(!(dir.exists() && dir.isDirectory())) {
-                dir.mkdir();
-            }
-            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Images");
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Saved");
             if(!(dir.exists() && dir.isDirectory())) {
                 dir.mkdir();
             }
         }
         else{
             dir.mkdir();
-            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Videos");
-            dir.mkdir();
-            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Images");
+            dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Saved");
             dir.mkdir();
         }
     }

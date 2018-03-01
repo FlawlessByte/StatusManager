@@ -26,6 +26,7 @@ public class IntroActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
 
         MediaFiles.initMediaFiles();
+        MediaFiles.initAppDirectrories();
 
         Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
         startActivity(intent);
