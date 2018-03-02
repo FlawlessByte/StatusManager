@@ -62,6 +62,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
 
         viewPager = (ViewPager) v.findViewById(R.id.viewpagerss);
+        viewPager.setOffscreenPageLimit(0);
         lblCount = (TextView) v.findViewById(R.id.lbl_count);
         lblTitle = (TextView) v.findViewById(R.id.titles);
         lblDate = (TextView) v.findViewById(R.id.date);
@@ -144,6 +145,19 @@ public class SlideshowDialogFragment extends DialogFragment {
         setCurrentItem(selectedPosition);
 
         return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isVisibleToUser){
+            Toast.makeText(getActivity(),"Visible to user frag "+selectedPosition,Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getActivity(),"Not visible frag "+selectedPosition,Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void setCurrentItem(int position) {
