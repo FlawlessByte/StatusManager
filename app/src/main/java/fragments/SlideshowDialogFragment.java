@@ -1,11 +1,11 @@
 package fragments;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.TransitionDrawable;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
@@ -22,14 +22,19 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import co.realinventor.statusmanager.R;
+import helpers.Favourites;
 import helpers.Image;
 import helpers.MediaFiles;
 
@@ -41,11 +46,8 @@ public class SlideshowDialogFragment extends DialogFragment {
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
     private int selectedPosition = 0;
-
-    public static final int FILE_VIDEO = 100;
-    public static final int FILE_IMAGE = 101;
-    private int MEDIA_TYPE;
     private MediaController mc;
+    private ImageButton imageDownload,imageShare,imageLove;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -64,30 +66,71 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblTitle = (TextView) v.findViewById(R.id.titles);
         lblDate = (TextView) v.findViewById(R.id.date);
 
-        final ImageButton imageButton = (ImageButton)v.findViewById(R.id.imageDownloadButton);
+        imageDownload = (ImageButton)v.findViewById(R.id.imageDownloadButton);
+        imageShare = (ImageButton)v.findViewById(R.id.imageShareButton);
+        imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
 
 
-        MEDIA_TYPE = getArguments().getInt("MEDIA_TYPE");
-
-        if(MEDIA_TYPE == FILE_IMAGE) {
-            images = (ArrayList<Image>) getArguments().getSerializable("images");
-        }
-        else {
-            images = (ArrayList<Image>) getArguments().getSerializable("images");
-        }
+        images = (ArrayList<Image>) getArguments().getSerializable("images");
 
         selectedPosition = getArguments().getInt("position");
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+
+        imageDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String filepath = images.get(selectedPosition).getLarge();
+                Log.d("File to be downloaded",filepath);
                 MediaFiles.copyToDownload(filepath);
                 Toast.makeText(getActivity(),"File saved!",Toast.LENGTH_SHORT).show();
                 Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
-                imageButton.startAnimation(anims);
+                imageDownload.startAnimation(anims);
                 Log.d("ImageButton", "Pressed");
+            }
+        });
+
+        imageLove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(getActivity(),"Added to favourites!",Toast.LENGTH_SHORT).show();
+                imageLove.setBackgroundResource(R.drawable.ic_action_love_red);
+                Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
+                imageLove.startAnimation(anims);
+                anims.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        imageLove.setBackgroundResource(R.drawable.ic_action_love);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                Log.d("ImageButton", "Pressed");
+                addFavs(images.get(selectedPosition).getLarge());
+            }
+        });
+
+
+
+        imageShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Preparing file for sharing..", Toast.LENGTH_SHORT).show();
+                String filepath = images.get(selectedPosition).getLarge();
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(filepath));
+                shareIntent.setType("image/jpeg");
+                startActivity(Intent.createChooser(shareIntent, "Shared with StatusManager"));
             }
         });
 
@@ -129,19 +172,10 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     private void displayMetaInfo(int position) {
 
-
-        if(MEDIA_TYPE == FILE_IMAGE){
-            lblCount.setText((position + 1) + " of " + images.size());
-            Image image = images.get(position);
-            lblTitle.setText(image.getSize());
-            lblDate.setText(image.getTimestamp());
-        }
-        else{
-            lblCount.setText((position + 1) + " of " + images.size());
-            Image video =images.get(position);
-            lblTitle.setText(video.getSize());
-            lblDate.setText(video.getTimestamp());
-        }
+        lblCount.setText((position + 1) + " of " + images.size());
+        Image image = images.get(position);
+        lblTitle.setText(image.getSize());
+        lblDate.setText(image.getTimestamp());
 
     }
 
@@ -149,6 +183,60 @@ public class SlideshowDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+    }
+
+
+    //Private File Access
+    private void addFavs(String favs){
+        favs = favs.replace(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses/","");
+        Log.d("Filename to be written",favs);
+        boolean readingSuccess = false;
+        ArrayList<String> lines = new ArrayList<>();
+
+        try{
+            FileInputStream fis = getActivity().openFileInput(Favourites.FAV_FILENAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                Log.d("String lines", line);
+                lines.add(line);
+            }
+            readingSuccess = true;
+        }
+        catch (FileNotFoundException e){
+            Log.e("File open ", "File not found..");
+        }
+        catch (IOException ios){
+            Log.e("File read", "Error reading file");
+        }
+
+        if(readingSuccess){
+            boolean entry_exists = false;
+            for(String ln : lines){
+                if(favs.equals(ln)){
+                    entry_exists = true;
+                    break;
+                }
+            }
+            if(!entry_exists){
+                try{
+                    FileOutputStream fos = getActivity().openFileOutput(Favourites.FAV_FILENAME, Context.MODE_APPEND);
+                    fos.write("\n".getBytes());
+                    fos.write(favs.getBytes());
+                    fos.close();
+                }
+                catch (IOException ioexc){
+                    ioexc.printStackTrace();
+                }
+
+            }
+
+        }
+
+
     }
 
 
@@ -166,7 +254,8 @@ public class SlideshowDialogFragment extends DialogFragment {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
-            if(MEDIA_TYPE == FILE_IMAGE){
+
+            if(!(images.get(position).isVideo())){
                 PhotoView photoView = (PhotoView) view.findViewById(R.id.image_preview);
                 photoView.setVisibility(View.VISIBLE);
 

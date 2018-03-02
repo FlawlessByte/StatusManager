@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/image_preview"
         android:layout_width="fill_parent"

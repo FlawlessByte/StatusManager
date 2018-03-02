@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import fragments.DownViewFragment;
 import fragments.PlaceholderFragment;
 
 /**
@@ -38,6 +39,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 PlaceholderFragment fragment2 = new PlaceholderFragment();
                 fragment2.setArguments(args2);
                 return fragment2;
+            case 2:
+                return  new DownViewFragment();
             default:
                 return null;
         }
@@ -47,7 +50,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 2;
+        return 3;
     }
 
     @Override
@@ -57,6 +60,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return "Images";
             case 1:
                 return "Videos";
+            case 2:
+                return "Saved";
             default:
                 return null;
         }

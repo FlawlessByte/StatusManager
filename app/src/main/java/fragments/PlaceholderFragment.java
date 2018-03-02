@@ -78,29 +78,18 @@ public class PlaceholderFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-
                 Bundle bundle = new Bundle();
-                if(MEDIA_TYPE == FILE_IMAGE){
-                    bundle.putInt("MEDIA_TYPE",101);
-                }
-                else {
-                    bundle.putInt("MEDIA_TYPE",100);
-                }
-
                 bundle.putSerializable("images", images);
                 bundle.putInt("position", position);
-
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                 newFragment.setArguments(bundle);
                 newFragment.show(ft, "slideshow");
-
-
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT).show();
             }
         }));
 

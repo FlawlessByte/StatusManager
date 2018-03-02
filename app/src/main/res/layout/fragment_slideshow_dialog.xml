@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:padding="7dp"
+        android:background="@drawable/toolbar_trans"
         android:layout_centerHorizontal="true">
 
         <TextView
@@ -24,10 +25,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="16dp"
-            android:layout_marginLeft="5dp"
-            android:layout_alignParentLeft="true"
+            android:textSize="16sp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="20dp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageLoveButton"
+            android:layout_toLeftOf="@+id/imageShareButton"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_action_love" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageShareButton"
+            android:layout_toLeftOf="@+id/imageDownloadButton"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/share_button_background" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -47,7 +64,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="vertical"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="30dp"
         android:padding="20dp">
 
         <TextView

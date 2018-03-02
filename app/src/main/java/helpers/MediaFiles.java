@@ -20,10 +20,12 @@ public class MediaFiles {
     public static ArrayList<String> videoFiles = new ArrayList<String>();
     public static ArrayList<String> savedVideoFiles = new ArrayList<>();
     public static ArrayList<String> savedImageFiles = new ArrayList<>();
+    public static ArrayList<String> savedFiles = new ArrayList<>();
     private static String APP_FOLDER_NAME = "StatusManager";
     public static final String DOWNLOADED_IMAGE_PATH = Environment.getExternalStorageDirectory()+"/"+APP_FOLDER_NAME+"/Saved/";
 
 
+    //Copy to App folder operations
     public static void copyToDownload(String path){
         File src = new File(path);
         File des = new File(DOWNLOADED_IMAGE_PATH, src.getName());
@@ -63,13 +65,20 @@ public class MediaFiles {
         }
     }
 
+
     public static void initSavedFiles(){
         File directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Saved");
+        savedFiles.clear();
+        savedVideoFiles.clear();
+        savedImageFiles.clear();
 
         File[] files = directory.listFiles();
         Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
         {
+            if(files[i].getName().endsWith(".mp4") || files[i].getName().endsWith(".jpg")){
+                savedFiles.add(files[i].getName());
+            }
             if(files[i].getName().endsWith(".mp4")){
                 savedVideoFiles.add(files[i].getName());
             }
@@ -78,6 +87,10 @@ public class MediaFiles {
             }
         }
 
+    }
+
+    public static ArrayList<String> getSavedFiles(){
+        return savedFiles;
     }
 
     public static ArrayList<String> getSavedVideoFiles(){
@@ -115,6 +128,9 @@ public class MediaFiles {
 
     //Method to initialise allFiles, imageFiles, videoFiles
     public static void initMediaFiles(){
+        imageFiles.clear();
+        videoFiles.clear();
+        allFiles.clear();
         File directory = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
         Log.d("Directory exists:",""+doesWhatsappDirExist());
         File[] files = directory.listFiles();

@@ -25,10 +25,7 @@ import co.realinventor.statusmanager.R;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
-
-    private boolean isImage;
     private List<Image> images;
-//    private List<Image> videos;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
