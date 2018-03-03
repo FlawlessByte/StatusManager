@@ -76,7 +76,58 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         selectedPosition = getArguments().getInt("position");
 
+        Log.e(TAG, "position: " + selectedPosition);
+        Log.e(TAG, "images size: " + images.size());
 
+        myViewPagerAdapter = new MyViewPagerAdapter();
+        viewPager.setAdapter(myViewPagerAdapter);
+        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+        setCurrentItem(selectedPosition);
+
+        return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isVisibleToUser){
+            Toast.makeText(getActivity(),"Visible to user frag "+selectedPosition,Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getActivity(),"Not visible frag "+selectedPosition,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void setCurrentItem(int position) {
+        viewPager.setCurrentItem(position, false);
+        displayMetaInfo(selectedPosition);
+    }
+
+    //  page change listener
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+            displayMetaInfo(position);
+            setListeners(position);
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    private void setListeners(int position){
+        final int selectedPosition = position;
         imageDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,55 +185,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                 startActivity(Intent.createChooser(shareIntent, "Shared with StatusManager"));
             }
         });
-
-        Log.e(TAG, "position: " + selectedPosition);
-        Log.e(TAG, "images size: " + images.size());
-
-        myViewPagerAdapter = new MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        setCurrentItem(selectedPosition);
-
-        return v;
     }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(isVisibleToUser){
-            Toast.makeText(getActivity(),"Visible to user frag "+selectedPosition,Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getActivity(),"Not visible frag "+selectedPosition,Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void setCurrentItem(int position) {
-        viewPager.setCurrentItem(position, false);
-        displayMetaInfo(selectedPosition);
-    }
-
-    //  page change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-            displayMetaInfo(position);
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
-    };
 
     private void displayMetaInfo(int position) {
 
