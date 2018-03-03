@@ -31,6 +31,15 @@
             android:layout_marginLeft="20dp"
             android:textStyle="bold" />
 
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageDeleteButton"
+            android:layout_toLeftOf="@+id/imageLoveButton"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:background="@drawable/ic_action_delete_white" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

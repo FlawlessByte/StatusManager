@@ -29,6 +29,8 @@ public class MediaFiles {
     public static void copyToDownload(String path){
         File src = new File(path);
         File des = new File(DOWNLOADED_IMAGE_PATH, src.getName());
+        Log.d("source file",src.getPath());
+        Log.d("destination file",src.getPath());
         try{
             copyFile(src,des);
         }

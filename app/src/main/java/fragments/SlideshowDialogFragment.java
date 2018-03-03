@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -47,7 +48,9 @@ public class SlideshowDialogFragment extends DialogFragment {
     private TextView lblCount, lblTitle, lblDate;
     private int selectedPosition = 0;
     private MediaController mc;
-    private ImageButton imageDownload,imageShare,imageLove;
+    private ImageButton imageDownload,imageShare,imageLove,imageDelete;
+    String page_title = "unknown";
+    private ViewGroup cont;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -59,6 +62,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_slideshow_dialog, container, false);
+        cont = container;
 
 
         viewPager = (ViewPager) v.findViewById(R.id.viewpagerss);
@@ -70,6 +74,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageDownload = (ImageButton)v.findViewById(R.id.imageDownloadButton);
         imageShare = (ImageButton)v.findViewById(R.id.imageShareButton);
         imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
+        imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
 
 
         images = (ArrayList<Image>) getArguments().getSerializable("images");
@@ -86,18 +91,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         setCurrentItem(selectedPosition);
 
         return v;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(isVisibleToUser){
-            Toast.makeText(getActivity(),"Visible to user frag "+selectedPosition,Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getActivity(),"Not visible frag "+selectedPosition,Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -185,6 +178,34 @@ public class SlideshowDialogFragment extends DialogFragment {
                 startActivity(Intent.createChooser(shareIntent, "Shared with StatusManager"));
             }
         });
+
+        imageDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Deleting the file..", Toast.LENGTH_SHORT).show();
+                imageDelete.setBackgroundResource(R.drawable.ic_action_delete_red);
+            }
+        });
+
+        try{
+            page_title = getArguments().getString("title");
+            if(page_title.equals("downloads")){
+                //Removes ImageDownloadButton from Layout
+                imageDownload.setVisibility(View.GONE);
+
+                //Change ShareImageButton property to align_parent_right
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageShare.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                imageShare.setLayoutParams(params);
+
+                //Make delete button visible
+                imageDelete.setVisibility(View.VISIBLE);
+            }
+        }
+        catch (Exception e){
+            Log.d("Default tabs","Neglected");
+        }
+
     }
 
     private void displayMetaInfo(int position) {
@@ -352,7 +373,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         @Override
         public int getCount() {
             return images.size();
-
         }
 
         @Override
@@ -365,6 +385,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+
     }
 
 

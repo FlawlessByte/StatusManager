@@ -59,6 +59,7 @@ public class DownViewFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("images", images);
                 bundle.putInt("position", position);
+                bundle.putString("title","downloads");
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                 newFragment.setArguments(bundle);
