@@ -52,7 +52,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private TextView lblCount, lblTitle, lblDate;
     private int selectedPosition = 0;
     private MediaController mc;
-    private ImageButton imageDownload,imageShare,imageLove,imageDelete;
+    private ImageButton imageDownload,imageShare,imageLove,imageDelete,imageUnlove;
     String page_title = "unknown";
     private ViewGroup cont;
 
@@ -79,6 +79,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageShare = (ImageButton)v.findViewById(R.id.imageShareButton);
         imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
         imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
+        imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
 
 
         images = (ArrayList<Image>) getArguments().getSerializable("images");
@@ -224,6 +225,13 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 //Make delete button visible
                 imageDelete.setVisibility(View.VISIBLE);
+            }
+            if(page_title.equals("favs")){
+                imageDownload.setVisibility(View.GONE);
+                imageDelete.setVisibility(View.GONE);
+                imageShare.setVisibility(View.GONE);
+                imageLove.setVisibility(View.GONE);
+                imageUnlove.setVisibility(View.VISIBLE);
             }
         }
         catch (Exception e){

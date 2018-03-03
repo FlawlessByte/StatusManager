@@ -40,7 +40,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment2.setArguments(args2);
                 return fragment2;
             case 2:
-                return  new DownViewFragment();
+                Bundle args3 = new Bundle();
+                args3.putString("title","downloads");
+                DownViewFragment fragment3 = new DownViewFragment();
+                fragment3.setArguments(args3);
+                return fragment3;
+            case 3:
+                Bundle args4 = new Bundle();
+                args4.putString("title","favs");
+                DownViewFragment fragment4 = new DownViewFragment();
+                fragment4.setArguments(args4);
+                return fragment4;
             default:
                 return null;
         }
@@ -50,7 +60,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 4;
     }
 
     @Override
@@ -62,6 +72,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return "Videos";
             case 2:
                 return "Saved";
+            case 3:
+                return "Favourites";
             default:
                 return null;
         }
