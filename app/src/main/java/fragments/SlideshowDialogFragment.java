@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,6 +30,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -35,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import co.realinventor.statusmanager.R;
+import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
 import helpers.Image;
 import helpers.MediaFiles;
@@ -119,8 +123,9 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
     };
 
-    private void setListeners(int position){
+    private void setListeners(final int position){
         final int selectedPosition = position;
+
         imageDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,8 +187,27 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Deleting the file..", Toast.LENGTH_SHORT).show();
                 imageDelete.setBackgroundResource(R.drawable.ic_action_delete_red);
+
+                File file = new File(images.get(position).getLarge());
+                Log.d("File path",file.getPath());
+                boolean deleted = file.delete();
+//                setCurrentItem(position+1);
+                if(deleted){
+                    Toast.makeText(getActivity(), "Deleted the file..", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Could not delete..", Toast.LENGTH_SHORT).show();
+                }
+
+                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                intent.putExtra("title","downloads");
+                getActivity().finish();
+                startActivity(intent);
+
+                MediaFiles.initSavedFiles();
+                myViewPagerAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -330,12 +354,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                     }
                 });
 
-                videoView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        videoView.pause();
-                    }
-                });
 
                videoView.setOnTouchListener(new View.OnTouchListener() {
                    @Override

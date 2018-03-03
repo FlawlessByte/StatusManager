@@ -1,11 +1,13 @@
 package co.realinventor.statusmanager;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import co.realinventor.statusmanager.pageradapters.*;
@@ -32,6 +34,11 @@ public class ViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
 
+        //Title code to handle intent from download tab
+        String intent_title = getIntent().getStringExtra("title");
+
+
+
 
         //Tool bar thing
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,11 +52,18 @@ public class ViewActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        if(intent_title == null){
+            Log.e("intent tiltle", "null");
+        }
+        else if(intent_title.equals("downloads")){
+            mViewPager.setCurrentItem(2);
+        }
 
 
     }
