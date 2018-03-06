@@ -11,7 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +22,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.formats.NativeAd;
+import com.google.android.gms.ads.formats.NativeAppInstallAd;
+import com.google.android.gms.ads.formats.NativeContentAd;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import co.realinventor.statusmanager.R;
 import helpers.GalleryAdapter;
@@ -38,11 +48,18 @@ public class PlaceholderFragment extends Fragment {
     public static final int FILE_VIDEO = 100;
     public static final int FILE_IMAGE = 101;
     private int MEDIA_TYPE ;
+    private int GRID_COUNT = 2;
 
-//    private String TAG = getClass().getSimpleName();
-//    private static final String endpoint = "https://api.androidhive.info/json/glide.json";
+
+    /**Ad variables**/
+    // The number of native ads to load and display.
+    public static final int NUMBER_OF_ADS = 2;
+
+    // List of native ads that have been successfully loaded.
+    private List<NativeAd> mNativeAds = new ArrayList<>();
+
     private ArrayList<Image> images;
-//    private ArrayList<Image> videos;
+    private ArrayList<Object> allObjects;
 
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -62,14 +79,19 @@ public class PlaceholderFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         images = new ArrayList<>();
-        mAdapter = new GalleryAdapter(getActivity(),images);
+        allObjects = new ArrayList<>();
+        mAdapter = new GalleryAdapter(getActivity(),allObjects);
 
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(GRID_COUNT, LinearLayoutManager.VERTICAL);
 
         if(MEDIA_TYPE == FILE_VIDEO){
-            mLayoutManager = new GridLayoutManager(getActivity(), 2);
+//            mLayoutManager = new GridLayoutManager(getActivity(), 1);
+            mLayoutManager = new StaggeredGridLayoutManager(GRID_COUNT, LinearLayoutManager.VERTICAL);
         }
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -97,6 +119,12 @@ public class PlaceholderFragment extends Fragment {
         processImages();
 
         Collections.sort(images, Image.dateComparator);
+
+        for(Image i: images){
+            allObjects.add(i);
+        }
+
+        loadNativeAd();
 
         mAdapter.notifyDataSetChanged();
 
@@ -147,5 +175,65 @@ public class PlaceholderFragment extends Fragment {
 
 
         }
+    }
+
+
+    private void insertAdsInItems() {
+        if (mNativeAds.size() <= 0) {
+            return;
+        }
+
+        int offset = (allObjects.size() / mNativeAds.size()) + 1;
+        int index = 0;
+        for (NativeAd ad: mNativeAds) {
+            allObjects.add(index, ad);
+            index = index + offset;
+        }
+//        loadMenu();
+    }
+
+
+    private void loadNativeAd(final int adLoadCount) {
+
+        if (adLoadCount >= NUMBER_OF_ADS) {
+            insertAdsInItems();
+            return;
+        }
+
+        AdLoader.Builder builder = new AdLoader.Builder(getActivity(), "ca-app-pub-3940256099942544/2247696110");
+        AdLoader adLoader = builder.forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
+            @Override
+            public void onAppInstallAdLoaded(NativeAppInstallAd ad) {
+                // An app install ad loaded successfully, call this method again to
+                // load the next ad in the items list.
+                mNativeAds.add(ad);
+                loadNativeAd(adLoadCount + 1);
+
+            }
+        }).forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
+            @Override
+            public void onContentAdLoaded(NativeContentAd ad) {
+                // A content ad loaded successfully, call this method again to
+                // load the next ad in the items list.
+                mNativeAds.add(ad);
+                loadNativeAd(adLoadCount + 1);
+            }
+        }).withAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // A native ad failed to load. Call this method again to load
+                // the next ad in the items list.
+                Log.e("MainActivity", "The previous native ad failed to load. Attempting to" +
+                        " load another.");
+                loadNativeAd(adLoadCount + 1);
+            }
+        }).build();
+
+        // Load the Native Express ad.
+        adLoader.loadAd(new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build());
+    }
+
+    private void loadNativeAd() {
+        loadNativeAd(0);
     }
 }

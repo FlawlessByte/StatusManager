@@ -8,17 +8,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 import co.realinventor.statusmanager.R;
+import helpers.Favourites;
 import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
@@ -32,6 +40,7 @@ public class DownViewFragment extends Fragment {
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Image> images;
+    private ArrayList<Object> allObjects;
 
 
     public DownViewFragment(){};
@@ -44,7 +53,8 @@ public class DownViewFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         images = new ArrayList<>();
-        mAdapter = new GalleryAdapter(getActivity(),images);
+        allObjects = new ArrayList<>();
+        mAdapter = new GalleryAdapter(getActivity(),allObjects);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
 
@@ -75,6 +85,10 @@ public class DownViewFragment extends Fragment {
 
         Collections.sort(images, Image.dateComparator);
 
+        for(Image i: images){
+            allObjects.add(i);
+        }
+
         mAdapter.notifyDataSetChanged();
 
         return rootView;
@@ -85,6 +99,11 @@ public class DownViewFragment extends Fragment {
         ArrayList<String> fils;
 
         fils = MediaFiles.getSavedFiles();
+
+//        if(getArguments().getString("title").equals("favs")){
+//            fils.clear();
+//            fils = getFavFiles();
+//        }
 
         //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
 
@@ -117,4 +136,36 @@ public class DownViewFragment extends Fragment {
     }
 
 
+    private ArrayList<String> getFavFiles(){
+        ArrayList<String> lines= new ArrayList<>();
+        try{
+            FileInputStream fis = getActivity().openFileInput(Favourites.FAV_FILENAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                Log.d("String lines", line);
+                lines.add(line);
+            }
+        }
+        catch (FileNotFoundException e){
+            Log.e("File open ", "File not found..");
+        }
+        catch (IOException ios){
+            Log.e("File read", "Error reading file");
+        }
+
+        Iterator<String> iter = lines.iterator();
+        while(iter.hasNext()){
+            String str = iter.next();
+            File file = new File(MediaFiles.DOWNLOADED_IMAGE_PATH +str);
+            if(!file.exists()){
+                iter.remove();
+            }
+        }
+
+        return lines;
+    }
 }

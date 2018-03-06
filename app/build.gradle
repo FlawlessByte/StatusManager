@@ -41,4 +41,10 @@ dependencies {
 
     //Lottie
     compile 'com.airbnb.android:lottie:2.5.0'
+
+    //Admob ads
+    compile 'com.google.android.gms:play-services-ads:11.8.0'
+
+    //Cardview
+    compile 'com.android.support:cardview-v7:26.1.0'
 }

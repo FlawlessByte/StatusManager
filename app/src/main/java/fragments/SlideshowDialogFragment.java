@@ -259,6 +259,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     //Private File Access
     private void addFavs(String favs){
         favs = favs.replace(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses/","");
+        favs = favs.replace(MediaFiles.DOWNLOADED_IMAGE_PATH, "");
         Log.d("Filename to be written",favs);
         boolean readingSuccess = false;
         ArrayList<String> lines = new ArrayList<>();
