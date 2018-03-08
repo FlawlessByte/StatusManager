@@ -1,6 +1,7 @@
 package co.realinventor.statusmanager;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 import co.realinventor.statusmanager.pageradapters.*;
 
 public class ViewActivity extends AppCompatActivity {
@@ -37,11 +40,9 @@ public class ViewActivity extends AppCompatActivity {
         //Title code to handle intent from download tab
         String intent_title = getIntent().getStringExtra("title");
 
-
-
-
         //Tool bar thing
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.CustomFontForToolBar);
         setSupportActionBar(toolbar);
 
 
@@ -51,6 +52,7 @@ public class ViewActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -61,8 +63,17 @@ public class ViewActivity extends AppCompatActivity {
         if(intent_title == null){
             Log.e("intent tiltle", "null");
         }
+        else if(intent_title.equals("images")){
+            mViewPager.setCurrentItem(0);
+        }
+        else if(intent_title.equals("videos")){
+            mViewPager.setCurrentItem(1);
+        }
         else if(intent_title.equals("downloads")){
             mViewPager.setCurrentItem(2);
+        }
+        else if(intent_title.equals("favs")){
+            mViewPager.setCurrentItem(3);
         }
 
 

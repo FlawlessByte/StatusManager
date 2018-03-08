@@ -208,15 +208,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             default:
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.gallery_thumbnail, parent, false);
-
                 return new MyViewHolder(itemView);
         }
 
-
-//        View itemView = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.gallery_thumbnail, parent, false);
-//
-//        return new MyViewHolder(itemView);
     }
 
     @Override
@@ -253,25 +247,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .into(myViewHolder.thumbnail);
                 }
         }
-
-
-
-//        Image image = images.get(position);
-//        if(!image.isVideo()){
-//
-//            Glide.with(mContext).load(Uri.fromFile(new File(image.getLarge())))
-//                    .thumbnail(0.5f)
-//                    .crossFade()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .into(holder.thumbnail);
-//
-//        }
-//        else{
-//
-//            Glide.with(mContext).load(Uri.fromFile(new File(image.getLarge())))
-//                    .thumbnail(0.5f)
-//                    .into(holder.thumbnail);
-//        }
     }
 
     @Override

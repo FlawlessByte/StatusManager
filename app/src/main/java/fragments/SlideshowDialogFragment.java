@@ -6,10 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -46,7 +43,8 @@ import helpers.MediaFiles;
 
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
-    private ArrayList<Image> images;
+    private ArrayList<Object> allObjects;
+    private ArrayList<Image> images = new ArrayList<>();
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -82,7 +80,13 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
 
 
-        images = (ArrayList<Image>) getArguments().getSerializable("images");
+        allObjects = (ArrayList<Object>) getArguments().getSerializable("images");
+
+        for(Object obj: allObjects){
+            if(obj instanceof Image){
+                images.add((Image)obj);
+            }
+        }
 
         selectedPosition = getArguments().getInt("position");
 

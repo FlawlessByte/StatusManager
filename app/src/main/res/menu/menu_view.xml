@@ -13,4 +13,9 @@
         android:title="grid"
         android:icon="@drawable/menu_grid_16px"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_refresh"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="refresh"/>
 </menu>

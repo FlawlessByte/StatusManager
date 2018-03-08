@@ -1,15 +1,21 @@
 package fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -26,6 +32,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import co.realinventor.statusmanager.R;
+import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
 import helpers.GalleryAdapter;
 import helpers.Image;
@@ -41,9 +48,16 @@ public class DownViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Image> images;
     private ArrayList<Object> allObjects;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public DownViewFragment(){};
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -51,6 +65,20 @@ public class DownViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+
+        swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("SwipeRefreshLayout ", "onRefresh called from SwipeRefreshLayout");
+                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                String title_value = (getArguments().getString("title").equals("favs")) ? "favs" : "downloads";
+                intent.putExtra("title",title_value);
+                getActivity().finish();
+                startActivity(intent);
+            }
+        });
 
         images = new ArrayList<>();
         allObjects = new ArrayList<>();
@@ -167,5 +195,47 @@ public class DownViewFragment extends Fragment {
         }
 
         return lines;
+    }
+
+
+    //Menu thing
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        if(id == R.id.action_refresh){
+            Log.i("Menu refresh", "Refresh menu item selected");
+
+            // Signal SwipeRefreshLayout to start the progress indicator
+            swipeRefreshLayout.setRefreshing(true);
+            final Intent intent = new Intent(getActivity(), ViewActivity.class);
+            String title_value = (getArguments().getString("title").equals("favs")) ? "favs" : "downloads";
+            intent.putExtra("title",title_value);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().finish();
+                    startActivity(intent);
+                }
+            },1000);
+
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
