@@ -124,14 +124,19 @@ public class DownViewFragment extends Fragment {
 
     private void processImages(){
 
-        ArrayList<String> fils;
+        ArrayList<String> fils, savedFiles,favs_files;
+        savedFiles = new ArrayList<>();
+        favs_files = new ArrayList<>();
 
-        fils = MediaFiles.getSavedFiles();
+        savedFiles = MediaFiles.getSavedFiles();
+        fils = savedFiles;
 
-//        if(getArguments().getString("title").equals("favs")){
-//            fils.clear();
-//            fils = getFavFiles();
-//        }
+        if(getArguments().getString("title").equals("favs")){
+            favs_files = getFavFiles();
+            fils = favs_files;
+        }
+
+
 
         //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
 
@@ -190,6 +195,9 @@ public class DownViewFragment extends Fragment {
             String str = iter.next();
             File file = new File(MediaFiles.DOWNLOADED_IMAGE_PATH +str);
             if(!file.exists()){
+                iter.remove();
+            }
+            if(str.equals("")){
                 iter.remove();
             }
         }

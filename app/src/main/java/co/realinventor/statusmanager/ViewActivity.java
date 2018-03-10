@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import co.realinventor.statusmanager.pageradapters.*;
+import helpers.MediaFiles;
 
 public class ViewActivity extends AppCompatActivity {
 
@@ -36,6 +37,12 @@ public class ViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
+
+        //Init media files
+        MediaFiles.initMediaFiles();
+        MediaFiles.initAppDirectrories();
+        MediaFiles.initSavedFiles();
 
         //Title code to handle intent from download tab
         String intent_title = getIntent().getStringExtra("title");

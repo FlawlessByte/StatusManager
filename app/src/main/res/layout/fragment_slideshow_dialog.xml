@@ -38,7 +38,7 @@
             android:layout_marginRight="10dp"
             android:visibility="gone"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_action_love_red" />
+            android:background="@drawable/ic_action_broken_heart" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +53,7 @@
             android:id="@+id/imageLoveButton"
             android:layout_toLeftOf="@+id/imageShareButton"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:background="@drawable/ic_action_love" />
         <ImageButton
             android:layout_width="wrap_content"

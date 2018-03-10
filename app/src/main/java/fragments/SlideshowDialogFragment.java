@@ -1,6 +1,8 @@
 package fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -27,13 +29,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
@@ -78,6 +86,10 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
         imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
+
+
+
+        setListeners(getArguments().getInt("position"));
 
 
         allObjects = (ArrayList<Object>) getArguments().getSerializable("images");
@@ -192,26 +204,41 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageDelete.setBackgroundResource(R.drawable.ic_action_delete_red);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
+                builder.setMessage("Are you sure, you want to delete?")
+                        .setTitle("Alert!")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
 
-                File file = new File(images.get(position).getLarge());
-                Log.d("File path",file.getPath());
-                boolean deleted = file.delete();
+                                imageDelete.setBackgroundResource(R.drawable.ic_action_delete_red);
+
+                                File file = new File(images.get(position).getLarge());
+                                Log.d("File path",file.getPath());
+                                boolean deleted = file.delete();
 //                setCurrentItem(position+1);
-                if(deleted){
-                    Toast.makeText(getActivity(), "Deleted the file..", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getActivity(), "Could not delete..", Toast.LENGTH_SHORT).show();
-                }
+                                if(deleted){
+                                    Toast.makeText(getActivity(), "Deleted the file..", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Could not delete..", Toast.LENGTH_SHORT).show();
+                                }
 
-                Intent intent = new Intent(getActivity(), ViewActivity.class);
-                intent.putExtra("title","downloads");
-                getActivity().finish();
-                startActivity(intent);
+                                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                                intent.putExtra("title","downloads");
+                                getActivity().finish();
+                                startActivity(intent);
 
-                MediaFiles.initSavedFiles();
-                myViewPagerAdapter.notifyDataSetChanged();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                builder.create();
+                builder.show();
 
             }
         });
@@ -229,6 +256,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 //Make delete button visible
                 imageDelete.setVisibility(View.VISIBLE);
+                imageLove.setVisibility(View.VISIBLE);
             }
             if(page_title.equals("favs")){
                 imageDownload.setVisibility(View.GONE);
@@ -236,6 +264,32 @@ public class SlideshowDialogFragment extends DialogFragment {
                 imageShare.setVisibility(View.GONE);
                 imageLove.setVisibility(View.GONE);
                 imageUnlove.setVisibility(View.VISIBLE);
+
+                imageUnlove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //write some code to delete file name entry from file
+                        Log.d("Unlove button",  "Clicked");
+                        String file_name_to_be_removed = images.get(position).getLarge();
+                        file_name_to_be_removed = file_name_to_be_removed.replace(MediaFiles.DOWNLOADED_IMAGE_PATH,"");
+                        int index = getLineIndex(file_name_to_be_removed);
+                        if(index != -1){
+                            File file = new File(getActivity().getFilesDir()+"/"+Favourites.FAV_FILENAME);
+                            try {
+                                Log.e("Try catch", "Enters here");
+                                removeLine(file, index);
+                                Toast.makeText(getActivity(),"Removed from favourites",Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                                intent.putExtra("title","favs");
+                                getActivity().finish();
+                                startActivity(intent);
+                            }
+                            catch (IOException e){
+                                Log.e("IOException at Unlove", "could not remove line");
+                            }
+                        }
+                    }
+                });
             }
         }
         catch (Exception e){
@@ -299,8 +353,8 @@ public class SlideshowDialogFragment extends DialogFragment {
             if(!entry_exists){
                 try{
                     FileOutputStream fos = getActivity().openFileOutput(Favourites.FAV_FILENAME, Context.MODE_APPEND);
-                    fos.write("\n".getBytes());
                     fos.write(favs.getBytes());
+                    fos.write("\n".getBytes());
                     fos.close();
                 }
                 catch (IOException ioexc){
@@ -314,6 +368,49 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     }
 
+    public int getLineIndex(String line_str){
+        int index = -1;
+        try{
+            FileInputStream fis = getActivity().openFileInput(Favourites.FAV_FILENAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+
+            String line;
+            int nom_index = 0;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                Log.d("String lines", line);
+                if(line.equals(line_str)){
+                    index = nom_index;
+                    break;
+                }
+                nom_index++;
+            }
+        }
+        catch (FileNotFoundException e){
+            Log.e("File open ", "File not found..");
+        }
+        catch (IOException ios){
+            Log.e("File read", "Error reading file");
+        }
+        return index;
+    }
+
+
+    public void removeLine(final File file, final int lineIndex) throws IOException{
+        final List<String> lines = new LinkedList<>();
+        final Scanner reader = new Scanner(new FileInputStream(file), "UTF-8");
+        while(reader.hasNextLine())
+            lines.add(reader.nextLine());
+        reader.close();
+        assert lineIndex >= 0 && lineIndex <= lines.size() - 1;
+        lines.remove(lineIndex);
+        final BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
+        for(final String line : lines)
+            writer.write(line+"\n");
+        writer.flush();
+        writer.close();
+    }
 
     //	adapter
     public class MyViewPagerAdapter extends PagerAdapter {
@@ -356,6 +453,8 @@ public class SlideshowDialogFragment extends DialogFragment {
                 videoView.setVideoURI(Uri.parse(large));
 
                 videoView.requestFocus();
+
+                videoView.seekTo(10);
 
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
