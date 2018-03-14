@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="General">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_auto_download"
+            android:summary="Automatically download new statuses to your storage"
+            android:title="Auto Download" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notifications">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="notifications_new_message"
+            android:title="Enable notifications"
+            android:summary="Enable notifications for new statuses"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

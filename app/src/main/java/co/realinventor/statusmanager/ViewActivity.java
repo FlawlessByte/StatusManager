@@ -103,6 +103,7 @@ public class ViewActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(ViewActivity.this, SettingsPrefActivity.class));
             return true;
         }
 

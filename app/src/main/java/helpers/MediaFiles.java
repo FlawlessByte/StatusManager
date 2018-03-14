@@ -22,6 +22,7 @@ public class MediaFiles {
     public static ArrayList<String> savedImageFiles = new ArrayList<>();
     public static ArrayList<String> savedFiles = new ArrayList<>();
     private static String APP_FOLDER_NAME = "StatusManager";
+    public static final String WHATSAPP_STATUS_FOLDER_PATH = Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/";
     public static final String DOWNLOADED_IMAGE_PATH = Environment.getExternalStorageDirectory()+"/"+APP_FOLDER_NAME+"/Saved/";
 
 
@@ -29,8 +30,8 @@ public class MediaFiles {
     public static void copyToDownload(String path){
         File src = new File(path);
         File des = new File(DOWNLOADED_IMAGE_PATH, src.getName());
-        Log.d("source file",src.getPath());
-        Log.d("destination file",src.getPath());
+//        Log.d("source file",src.getPath());
+//        Log.d("destination file",src.getPath());
         try{
             copyFile(src,des);
         }
@@ -72,7 +73,7 @@ public class MediaFiles {
         savedImageFiles.clear();
 
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
+//        Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
         {
             if(files[i].getName().endsWith(".mp4") || files[i].getName().endsWith(".jpg")){
@@ -131,9 +132,9 @@ public class MediaFiles {
         videoFiles.clear();
         allFiles.clear();
         File directory = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
-        Log.d("Directory exists:",""+doesWhatsappDirExist());
+//        Log.d("Directory exists:",""+doesWhatsappDirExist());
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
+//        Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
         {
             allFiles.add(files[i].getName());
@@ -145,13 +146,13 @@ public class MediaFiles {
             }
         }
 
-        for (String s:imageFiles){
-            Log.d("Image file: ",s);
-        }
-
-        for (String t:videoFiles){
-            Log.d("Video file: ",t);
-        }
+//        for (String s:imageFiles){
+//            Log.d("Image file: ",s);
+//        }
+//
+//        for (String t:videoFiles){
+//            Log.d("Video file: ",t);
+//        }
     }
 
     public static ArrayList<String> getAllFiles(){

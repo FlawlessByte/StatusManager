@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import co.realinventor.statusmanager.R;
+import co.realinventor.statusmanager.SettingsPrefActivity;
 import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
 import helpers.GalleryAdapter;
@@ -222,6 +223,7 @@ public class DownViewFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getActivity(), SettingsPrefActivity.class));
             return true;
         }
         if(id == R.id.action_refresh){

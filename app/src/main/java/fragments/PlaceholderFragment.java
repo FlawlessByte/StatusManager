@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import co.realinventor.statusmanager.R;
+import co.realinventor.statusmanager.SettingsPrefActivity;
 import co.realinventor.statusmanager.ViewActivity;
 import helpers.GalleryAdapter;
 import helpers.Image;
@@ -387,6 +388,7 @@ public class PlaceholderFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getActivity(), SettingsPrefActivity.class));
             return true;
         }
         if(id == R.id.action_refresh){
