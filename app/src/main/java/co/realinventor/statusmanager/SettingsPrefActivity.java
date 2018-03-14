@@ -80,7 +80,6 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
                 }
                 else{
                     Log.d("Notifications","Disabled");
-                    //ThreadHandler.getNotificationThread().cancel();
                     if(sharedPreferences.getBoolean(AUTODOWNLOAD_KEY, false)) {
                         getActivity().stopService(intent);
                         getActivity().startService(intent);

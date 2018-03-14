@@ -52,15 +52,12 @@ public class IntroActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
 
 
-        NotificationThread notificationThread = new NotificationThread(getApplicationContext());
-        ThreadHandler.notificationThread = notificationThread;
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
                 startActivity(intent);
             }
-        },2500);
+        },1500);
     }
 }

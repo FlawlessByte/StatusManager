@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import helpers.MediaFiles;
+
 public class MyService extends Service {
     public MyService() {
     }
@@ -25,12 +27,14 @@ public class MyService extends Service {
         Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.app_logo)
-                .setContentTitle("Some title");
+                .setContentTitle("StatusSaver");
         notification = builder.build();
 
         startForeground(2345, notification);
 
 
+        MyFileObserver myFileObserver = new MyFileObserver(MediaFiles.WHATSAPP_STATUS_FOLDER_PATH, getApplicationContext());
+        myFileObserver.startWatching();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if(prefs.getBoolean("key_auto_download",false)){
@@ -42,11 +46,9 @@ public class MyService extends Service {
 
         if(prefs.getBoolean("notifications_new_message",false)){
             Log.d("MyService","notifications enabled");
-            //ThreadHandler.getNotificationThread().start();
         }
         else {
             Log.d("MyService","Notifications disabled");
-            //ThreadHandler.getNotificationThread().cancel();
         }
 
         return Service.START_STICKY;
