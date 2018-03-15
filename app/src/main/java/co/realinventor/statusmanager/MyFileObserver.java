@@ -6,11 +6,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import helpers.Favourites;
-
 /**
  * Created by JIMMY on 14-Mar-18.
  */
@@ -22,10 +17,12 @@ public class MyFileObserver extends FileObserver {
         super(path, FileObserver.ALL_EVENTS);
         absolutePath = path;
         this.context = context;
+        Log.i("File Observer ", absolutePath);
     }
     @Override
     public void onEvent(int event, String path) {
         if (path == null) {
+            Log.i("File Observer ", "File null");
             return;
         }
         //a new file or subdirectory was created under the monitored directory
@@ -33,7 +30,7 @@ public class MyFileObserver extends FileObserver {
 //            FileAccessLogStatic.accessLogMsg += absolutePath + "/" + path + " is createdn";
 
 
-            Log.d("File Observer ", "Found 1 file"+absolutePath +"/"+path);
+            Log.i("File Observer ", "File created "+absolutePath +"/"+path);
             Toast.makeText(context, "Found 1 file"+absolutePath +"/"+path, Toast.LENGTH_SHORT).show();
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.app_logo)
@@ -45,10 +42,11 @@ public class MyFileObserver extends FileObserver {
         }
 
 
-//        //a file or directory was opened
-//        if ((FileObserver.OPEN & event)!=0) {
+        //a file or directory was opened
+        if ((FileObserver.OPEN & event)!=0) {
 //            FileAccessLogStatic.accessLogMsg += path + " is openedn";
-//        }
+            Log.i("File Observer ", absolutePath +"/"+path+" was openedn");
+        }
 //        //data was read from a file
 //        if ((FileObserver.ACCESS & event)!=0) {
 //            FileAccessLogStatic.accessLogMsg += absolutePath + "/" + path + " is accessed/readn";
@@ -61,10 +59,11 @@ public class MyFileObserver extends FileObserver {
 //        if ((FileObserver.CLOSE_NOWRITE & event)!=0) {
 //            FileAccessLogStatic.accessLogMsg += path + " is closedn";
 //        }
-//        //someone has a file or directory open for writing, and closed it
-//        if ((FileObserver.CLOSE_WRITE & event)!=0) {
+        //someone has a file or directory open for writing, and closed it
+        if ((FileObserver.CLOSE_WRITE & event)!=0) {
 //            FileAccessLogStatic.accessLogMsg += absolutePath + "/" + path + " is written and closedn";
-//        }
+            Log.i("File Observer ", absolutePath +"/"+path+" is written and closedn");
+        }
 //        //[todo: consider combine this one with one below]
 //        //a file was deleted from the monitored directory
 //        if ((FileObserver.DELETE & event)!=0) {
@@ -92,5 +91,10 @@ public class MyFileObserver extends FileObserver {
 //        if ((FileObserver.ATTRIB & event)!=0) {
 //            FileAccessLogStatic.accessLogMsg += absolutePath + "/" + path + " is changed (permissions, owner, timestamp)n";
 //        }
+    }
+
+    protected void finalize(){
+        super.finalize();
+        Log.i("File observer","Goingg to die");
     }
 }

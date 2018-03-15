@@ -5,13 +5,18 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.FileObserver;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import helpers.MediaFiles;
 
 public class MyService extends Service {
+
+    public static MyFileObserver myFileObserver;
+
     public MyService() {
     }
 
@@ -33,7 +38,7 @@ public class MyService extends Service {
         startForeground(2345, notification);
 
 
-        MyFileObserver myFileObserver = new MyFileObserver(MediaFiles.WHATSAPP_STATUS_FOLDER_PATH, getApplicationContext());
+        myFileObserver = new MyFileObserver(MediaFiles.WHATSAPP_STATUS_FOLDER_PATH, getApplicationContext());
         myFileObserver.startWatching();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
