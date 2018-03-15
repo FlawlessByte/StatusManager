@@ -84,7 +84,7 @@ public class IntroActivity extends AppCompatActivity {
                     // sees the explanation, try again to request the permission.
 
                     //Show Information about why you need the permission
-                    AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this, R.style.AlertDialogCustom);
                     builder.setTitle("Need Storage Permission");
                     builder.setMessage("This app needs read & write permission to access files in your system.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
@@ -98,6 +98,18 @@ public class IntroActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
+
+                            textView.setText("Please provide the required privilleges and try again!");
+                            button.setVisibility(View.VISIBLE);
+                            button.setText("Try Again!");
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    button.setVisibility(View.GONE);
+                                    checkIfPermissionGranted();
+                                }
+                            });
+
                         }
                     });
                     builder.show();
@@ -148,6 +160,7 @@ public class IntroActivity extends AppCompatActivity {
 
                     textView.setText("Please provide the required privilleges and try again!");
                     button.setVisibility(View.VISIBLE);
+                    button.setText("Try again!");
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -186,6 +199,7 @@ public class IntroActivity extends AppCompatActivity {
                 ios.printStackTrace();
             }
 
+            button.setText("Continue");
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
