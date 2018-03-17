@@ -27,6 +27,8 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -61,6 +63,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private ImageButton imageDownload,imageShare,imageLove,imageDelete,imageUnlove;
     String page_title = "unknown";
     private ViewGroup cont;
+    private AdView mAdView;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -73,6 +76,10 @@ public class SlideshowDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_slideshow_dialog, container, false);
         cont = container;
+
+        mAdView = v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         viewPager = (ViewPager) v.findViewById(R.id.viewpagerss);
@@ -161,28 +168,47 @@ public class SlideshowDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(getActivity(),"Added to favourites!",Toast.LENGTH_SHORT).show();
-                imageLove.setBackgroundResource(R.drawable.ic_action_love_red);
-                Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
-                imageLove.startAnimation(anims);
-                anims.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
+                builder.setMessage("Add this to favourites?")
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
+                                Toast.makeText(getActivity(),"Added to favourites!",Toast.LENGTH_SHORT).show();
+                                imageLove.setBackgroundResource(R.drawable.ic_action_love_red);
+                                Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
+                                imageLove.startAnimation(anims);
+                                anims.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
 
-                    }
+                                    }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        imageLove.setBackgroundResource(R.drawable.ic_action_love);
-                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        imageLove.setBackgroundResource(R.drawable.ic_action_love);
+                                    }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
 
-                    }
-                });
-                Log.d("ImageButton", "Pressed");
-                addFavs(images.get(selectedPosition).getLarge());
+                                    }
+                                });
+                                Log.d("ImageButton", "Pressed");
+                                addFavs(images.get(selectedPosition).getLarge());
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                builder.create();
+                builder.show();
+
+
+
             }
         });
 
@@ -270,24 +296,44 @@ public class SlideshowDialogFragment extends DialogFragment {
                     public void onClick(View view) {
                         //write some code to delete file name entry from file
                         Log.d("Unlove button",  "Clicked");
-                        String file_name_to_be_removed = images.get(position).getLarge();
-                        file_name_to_be_removed = file_name_to_be_removed.replace(MediaFiles.DOWNLOADED_IMAGE_PATH,"");
-                        int index = getLineIndex(file_name_to_be_removed);
-                        if(index != -1){
-                            File file = new File(getActivity().getFilesDir()+"/"+Favourites.FAV_FILENAME);
-                            try {
-                                Log.e("Try catch", "Enters here");
-                                removeLine(file, index);
-                                Toast.makeText(getActivity(),"Removed from favourites",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getActivity(), ViewActivity.class);
-                                intent.putExtra("title","favs");
-                                getActivity().finish();
-                                startActivity(intent);
-                            }
-                            catch (IOException e){
-                                Log.e("IOException at Unlove", "could not remove line");
-                            }
-                        }
+
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
+                        builder.setMessage("Remove this from favourites?")
+                                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // FIRE ZE MISSILES!
+                                        String file_name_to_be_removed = images.get(position).getLarge();
+                                        file_name_to_be_removed = file_name_to_be_removed.replace(MediaFiles.DOWNLOADED_IMAGE_PATH,"");
+                                        int index = getLineIndex(file_name_to_be_removed);
+                                        if(index != -1){
+                                            File file = new File(getActivity().getFilesDir()+"/"+Favourites.FAV_FILENAME);
+                                            try {
+                                                Log.e("Try catch", "Enters here");
+                                                removeLine(file, index);
+                                                Toast.makeText(getActivity(),"Removed from favourites",Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                                                intent.putExtra("title","favs");
+                                                getActivity().finish();
+                                                startActivity(intent);
+                                            }
+                                            catch (IOException e){
+                                                Log.e("IOException at Unlove", "could not remove line");
+                                            }
+                                        }
+
+
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // User cancelled the dialog
+                                    }
+                                });
+                        builder.create();
+                        builder.show();
+
                     }
                 });
             }

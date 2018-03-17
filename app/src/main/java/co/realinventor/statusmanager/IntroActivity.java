@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,12 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.airbnb.lottie.LottieAnimationView;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import helpers.Favourites;
 import helpers.MediaFiles;
 import com.google.android.gms.ads.MobileAds;
@@ -29,7 +24,6 @@ import com.google.android.gms.ads.MobileAds;
 
 public class IntroActivity extends AppCompatActivity {
 
-    boolean isPermGranted = false;
     private TextView textView;
     private Button button;
 
@@ -38,8 +32,11 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+
+
+
         //Admob initialization
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, "ca-app-pub-4525583199746587~9357637931");
 
 
         textView = (TextView)findViewById(R.id.textView);
@@ -48,20 +45,6 @@ public class IntroActivity extends AppCompatActivity {
 
         checkIfPermissionGranted();
 
-
-//        LottieAnimationView animationView = (LottieAnimationView) findViewById(R.id.lottieAnimView);
-//        animationView.playAnimation();
-
-
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
-//                finish();
-//                startActivity(intent);
-//            }
-//        },1500);
     }
 
 

@@ -1,7 +1,9 @@
 package fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -49,6 +51,7 @@ public class DownViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Image> images;
     private ArrayList<Object> allObjects;
+    private int GRID_COUNT = 3;
     private SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -64,6 +67,22 @@ public class DownViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
+
+
+        try {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences("GRID_NUMBERS", Context.MODE_PRIVATE);
+            if(getArguments().getString("title").equals("favs")) {
+                GRID_COUNT = sharedPref.getInt("favs_grid_count", 3);
+            }
+            if(getArguments().getString("title").equals("downloads")) {
+                GRID_COUNT = sharedPref.getInt("downloads_grid_count", 3);
+            }
+            Log.d("Shared pref try", "GRID_COUNT "+GRID_COUNT);
+        }
+        catch (Exception e){
+            Log.d("SHared pref ", "Not found 1");
+        }
+
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
@@ -85,7 +104,7 @@ public class DownViewFragment extends Fragment {
         allObjects = new ArrayList<>();
         mAdapter = new GalleryAdapter(getActivity(),allObjects);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), GRID_COUNT);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -226,6 +245,41 @@ public class DownViewFragment extends Fragment {
             startActivity(new Intent(getActivity(), SettingsPrefActivity.class));
             return true;
         }
+
+
+        if(id == R.id.action_grid){
+
+            if(GRID_COUNT >= 4){
+                GRID_COUNT = 1;
+            }
+            else{
+                GRID_COUNT++;
+            }
+
+            try {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("GRID_NUMBERS", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                if (getArguments().getString("title").equals("favs")) {
+                    editor.putInt("favs_grid_count", GRID_COUNT);
+                }
+                if (getArguments().getString("title").equals("downloads")) {
+                    editor.putInt("downloads_grid_count", GRID_COUNT);
+                }
+                editor.apply();
+            }
+            catch (Exception e){
+                Log.e("Shared pref", "Error writing to sharedprefs");
+            }
+
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), GRID_COUNT);
+            recyclerView.setLayoutManager(mLayoutManager);
+        }
+
+
+
+
+
         if(id == R.id.action_refresh){
             Log.i("Menu refresh", "Refresh menu item selected");
 

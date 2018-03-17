@@ -4,7 +4,9 @@ package fragments;
  * Created by JIMMY on 14-Feb-18.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -92,6 +94,23 @@ public class PlaceholderFragment extends Fragment {
 
         MEDIA_TYPE = getArguments().getInt("TYPE_MEDIA");
         Log.d("TYPE_MEDIA ", ""+MEDIA_TYPE);
+
+
+        try {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences("GRID_NUMBERS", Context.MODE_PRIVATE);
+            if(MEDIA_TYPE == FILE_VIDEO) {
+                GRID_COUNT = sharedPref.getInt("video_grid_count", 3);
+            }
+            if(MEDIA_TYPE == FILE_IMAGE) {
+                GRID_COUNT = sharedPref.getInt("image_grid_count", 3);
+            }
+            Log.d("Shared pref try", "GRID_COUNT "+GRID_COUNT);
+        }
+        catch (Exception e){
+            Log.d("SHared pref ", "Not found 1");
+        }
+
+
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipe_refresh_layout);
@@ -391,6 +410,35 @@ public class PlaceholderFragment extends Fragment {
             startActivity(new Intent(getActivity(), SettingsPrefActivity.class));
             return true;
         }
+
+        if(id == R.id.action_grid){
+
+            if(GRID_COUNT >= 4){
+                GRID_COUNT = 1;
+            }
+            else{
+                GRID_COUNT++;
+            }
+
+            try {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("GRID_NUMBERS", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if (MEDIA_TYPE == FILE_VIDEO) {
+                    editor.putInt("video_grid_count", GRID_COUNT);
+                }
+                if (MEDIA_TYPE == FILE_IMAGE) {
+                    editor.putInt("image_grid_count", GRID_COUNT);
+                }
+                editor.apply();
+            }
+            catch (Exception e){
+                Log.e("Shared pref", "Error writing to sharedprefs");
+            }
+
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), GRID_COUNT);
+            recyclerView.setLayoutManager(mLayoutManager);
+        }
+
         if(id == R.id.action_refresh){
             Log.i("Menu refresh", "Refresh menu item selected");
 

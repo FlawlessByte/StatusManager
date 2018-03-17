@@ -39,9 +39,6 @@ dependencies {
     //photozoom
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 
-    //Lottie
-    compile 'com.airbnb.android:lottie:2.5.0'
-
     //Admob ads
     compile 'com.google.android.gms:play-services-ads:11.8.0'
 

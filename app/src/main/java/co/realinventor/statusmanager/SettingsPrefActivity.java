@@ -1,6 +1,7 @@
 package co.realinventor.statusmanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,10 +30,24 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 //        setContentView(R.layout.activity_settings_pref);
 
 
+        getSupportActionBar().setTitle("Settings");
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // load settings fragment
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+        builder.setMessage("Some of the options are not functional right now. It will be available later in updates. Sorry for the inconvenience.")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                        dialog.dismiss();
+                    }
+                });
+        builder.create();
+        builder.show();
 
     }
 

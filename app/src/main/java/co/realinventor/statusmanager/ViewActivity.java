@@ -53,9 +53,11 @@ public class ViewActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+//        AdRequest.Builder.addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17");
+
         //Interstial ad
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 

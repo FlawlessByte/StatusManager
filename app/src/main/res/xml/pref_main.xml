@@ -4,6 +4,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="key_auto_download"
+            android:enabled="false"
             android:summary="Automatically download new statuses to your storage"
             android:title="Auto Download" />
     </PreferenceCategory>
@@ -11,6 +12,7 @@
     <PreferenceCategory android:title="Notifications">
         <SwitchPreference
             android:defaultValue="false"
+            android:enabled="false"
             android:key="notifications_new_message"
             android:title="Enable notifications"
             android:summary="Enable notifications for new statuses"/>
