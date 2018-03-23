@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,10 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.SettingsPrefActivity;
-import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
 import helpers.GalleryAdapter;
 import helpers.Image;
@@ -91,12 +88,23 @@ public class DownViewFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("SwipeRefreshLayout ", "onRefresh called from SwipeRefreshLayout");
-                Intent intent = new Intent(getActivity(), ViewActivity.class);
-                String title_value = (getArguments().getString("title").equals("favs")) ? "favs" : "downloads";
-                intent.putExtra("title",title_value);
-                getActivity().finish();
-                startActivity(intent);
+                processImages();
+                Collections.sort(images, Image.dateComparator);
+
+                for(Image i: images){
+                    allObjects.add(i);
+                }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                },800);
+
+                Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -144,16 +152,20 @@ public class DownViewFragment extends Fragment {
 
     private void processImages(){
 
-        ArrayList<String> fils, savedFiles,favs_files;
-        savedFiles = new ArrayList<>();
-        favs_files = new ArrayList<>();
+        ArrayList<String> fils;
 
-        savedFiles = MediaFiles.getSavedFiles();
-        fils = savedFiles;
+        images.clear();
+        allObjects.clear();
+        mAdapter.notifyDataSetChanged();
+        MediaFiles.initSavedFiles();
+        fils = MediaFiles.getSavedFiles();
 
         if(getArguments().getString("title").equals("favs")){
-            favs_files = getFavFiles();
-            fils = favs_files;
+            fils.clear();
+            fils = getFavFiles();
+            for(String str : fils){
+                Log.d("Fav files ",str);
+            }
         }
 
 
@@ -285,17 +297,24 @@ public class DownViewFragment extends Fragment {
 
             // Signal SwipeRefreshLayout to start the progress indicator
             swipeRefreshLayout.setRefreshing(true);
-            final Intent intent = new Intent(getActivity(), ViewActivity.class);
-            String title_value = (getArguments().getString("title").equals("favs")) ? "favs" : "downloads";
-            intent.putExtra("title",title_value);
+            processImages();
+            Collections.sort(images, Image.dateComparator);
+
+            for(Image i: images){
+                allObjects.add(i);
+            }
+
+
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getActivity().finish();
-                    startActivity(intent);
+                    mAdapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-            },1000);
+            },800);
 
+            Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
 
             return true;
         }

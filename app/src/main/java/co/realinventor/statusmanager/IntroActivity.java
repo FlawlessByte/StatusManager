@@ -4,8 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import helpers.Favourites;
 import helpers.MediaFiles;
 import com.google.android.gms.ads.MobileAds;
@@ -173,6 +179,8 @@ public class IntroActivity extends AppCompatActivity {
         else{
 
             textView.setText("Welcome!");
+
+            //Initialise Fav file
             try {
                 FileOutputStream fos = openFileOutput(Favourites.FAV_FILENAME, Context.MODE_APPEND);
                 fos.write("".getBytes());
@@ -182,17 +190,84 @@ public class IntroActivity extends AppCompatActivity {
                 ios.printStackTrace();
             }
 
-            button.setText("Continue");
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
-                    finish();
-                    startActivity(intent);
+
+            try {
+                SharedPreferences sharedPref = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+                if(sharedPref.getBoolean("isAppFirstTime", true)){
+
+                    //Change the value to false
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean("isAppFirstTime", false);
+                    editor.apply();
+
+                    //Make MediaScanner scan the existing files in StatusManager/Saved
+                    makeMediaScan();
+
+
+                    //First time continue button
+                    button.setText("Continue");
+                    button.setVisibility(View.VISIBLE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
+                            finish();
+                            startActivity(intent);
+                        }
+                    });
+
                 }
-            });
+                else{
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
+                            finish();
+                            startActivity(intent);
+                        }
+                    },1000);
+                }
+
+
+
+                Log.d("Shared pref try", "");
+            }
+            catch (Exception e){
+                Log.d("SHared pref ", "Not found 1");
+            }
+
+
+
+
 
         }
     }
+
+    private void makeMediaScan(){
+
+        MediaFiles.initSavedFiles();
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList = MediaFiles.getSavedFiles();
+//        String[] array = MediaFiles.getSavedFiles().toArray(new String[0]);
+        String array[] = new String[arrayList.size()];
+        int i = 0;
+        for(String str : arrayList){
+            array[i] = MediaFiles.DOWNLOADED_IMAGE_PATH + str;
+            i++;
+        }
+
+        MediaScannerConnection.scanFile(
+                getApplicationContext(),
+                array,
+                null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.v("MediaScanner ",
+                                "file " + path + " was scanned seccessfully: " + uri);
+                    }
+                });
+
+    }
+
 }

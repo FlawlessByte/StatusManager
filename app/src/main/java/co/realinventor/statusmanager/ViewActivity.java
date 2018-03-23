@@ -23,6 +23,7 @@ import com.google.android.gms.ads.InterstitialAd;
 
 import co.realinventor.statusmanager.pageradapters.*;
 import helpers.MediaFiles;
+import helpers.ViewPagerFixed;
 
 public class ViewActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class ViewActivity extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private ViewPagerFixed mViewPager;
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
 
@@ -50,7 +51,7 @@ public class ViewActivity extends AppCompatActivity {
 
         //Banner ad
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build();
         mAdView.loadAd(adRequest);
 
 //        AdRequest.Builder.addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17");
@@ -58,7 +59,7 @@ public class ViewActivity extends AppCompatActivity {
         //Interstial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build());
 
 
         //Init media files
@@ -80,7 +81,7 @@ public class ViewActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPagerFixed) findViewById(R.id.container);
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

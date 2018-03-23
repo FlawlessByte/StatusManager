@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">StatusSaver</string>
     <string name="title_activity_view">ViewActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Setting preference strings -->
+    <string name="free_whatsapp_summary1">Ever encountered some files from your Whatsapp status folder that are older
+        than 24 hrs and remains undeleted for a long time? They may consume your memory space.
+        Do you want to free up some memory deleting expired status files?</string>
+    <string name="free_whatsapp_summary2"> Don\'t worry, your saved files will be safe. It will only delete the expired remaining files
+    from your Whatsapp status folder, not of saved status.</string>
+    <string name="about_pref">Realinventor</string>
+
+
 </resources>

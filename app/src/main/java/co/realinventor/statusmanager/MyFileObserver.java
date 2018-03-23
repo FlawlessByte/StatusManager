@@ -21,6 +21,7 @@ public class MyFileObserver extends FileObserver {
     }
     @Override
     public void onEvent(int event, String path) {
+        Log.i("FileObserver ", "Some event occured");
         if (path == null) {
             Log.i("File Observer ", "File null");
             return;

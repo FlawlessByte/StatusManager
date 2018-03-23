@@ -7,6 +7,27 @@
             android:enabled="false"
             android:summary="Automatically download new statuses to your storage"
             android:title="Auto Download" />
+
+
+        <PreferenceScreen
+            android:summary="Clean up your Whatsapp status folder, removing expired files"
+            android:title="Free up some space?">
+            <PreferenceCategory android:title="Free up some space">
+                <Preference
+                    android:selectable="false"
+                    android:summary="@string/free_whatsapp_summary1" />
+                <Preference
+                    android:selectable="false"
+                    android:summary="@string/free_whatsapp_summary2" />
+
+                <Preference/>
+                <Preference
+                    android:key="key_free_whatsapp_fold"
+                    android:title="Click here to clean" />
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Notifications">
@@ -16,6 +37,37 @@
             android:key="notifications_new_message"
             android:title="Enable notifications"
             android:summary="Enable notifications for new statuses"/>
+
     </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="About">
+
+    <Preference
+        android:selectable="false"
+        android:summary="@string/about_pref" />
+
+    <Preference
+        android:summary="1.1"
+        android:title="Version" />
+
+    <Preference
+        android:key="key_feedback"
+        android:summary="Share what you feel about this app. Suggest edits."
+        android:title="Send Feedback" />
+
+    <Preference
+        android:key="key_rate_app"
+        android:summary="Enjoying the app? Rate the app best!"
+        android:title="Rate the app" />
+
+    <Preference
+        android:key="key_video_ad"
+        android:summary="Watch a video ad if you got some time."
+        android:title="Feeling bored? Or happy?" />
+
+    </PreferenceCategory>
+
+
 
 </PreferenceScreen>

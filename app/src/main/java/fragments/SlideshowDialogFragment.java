@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,7 +30,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,25 +43,26 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.ViewActivity;
 import helpers.Favourites;
 import helpers.Image;
 import helpers.MediaFiles;
+import helpers.ViewPagerFixed;
 
 
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<Object> allObjects;
     private ArrayList<Image> images = new ArrayList<>();
-    private ViewPager viewPager;
+    private ViewPagerFixed viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
+    private LinearLayout detailsLinearLayout;
     private int selectedPosition = 0;
     private MediaController mc;
     private ImageButton imageDownload,imageShare,imageLove,imageDelete,imageUnlove;
-    String page_title = "unknown";
+    private String page_title = "unknown";
     private ViewGroup cont;
     private AdView mAdView;
 
@@ -78,15 +79,15 @@ public class SlideshowDialogFragment extends DialogFragment {
         cont = container;
 
         mAdView = v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build();
         mAdView.loadAd(adRequest);
 
-
-        viewPager = (ViewPager) v.findViewById(R.id.viewpagerss);
+        viewPager = (ViewPagerFixed) v.findViewById(R.id.viewpagerss);
         viewPager.setOffscreenPageLimit(0);
         lblCount = (TextView) v.findViewById(R.id.lbl_count);
         lblTitle = (TextView) v.findViewById(R.id.titles);
         lblDate = (TextView) v.findViewById(R.id.date);
+        detailsLinearLayout = (LinearLayout) v.findViewById(R.id.detailsLinearLayout);
 
         imageDownload = (ImageButton)v.findViewById(R.id.imageDownloadButton);
         imageShare = (ImageButton)v.findViewById(R.id.imageShareButton);
@@ -161,6 +162,15 @@ public class SlideshowDialogFragment extends DialogFragment {
                 Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
                 imageDownload.startAnimation(anims);
                 Log.d("ImageButton", "Pressed");
+
+                //Notifies MediaScanner about this new file
+                File file = new File(filepath.replace(MediaFiles.WHATSAPP_STATUS_FOLDER_PATH,MediaFiles.DOWNLOADED_IMAGE_PATH));
+                Log.d("MediaScanner ",file.getPath());
+                Intent intent =
+                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(Uri.fromFile(file));
+                getActivity().sendBroadcast(intent);
+
             }
         });
 
@@ -272,6 +282,9 @@ public class SlideshowDialogFragment extends DialogFragment {
         try{
             page_title = getArguments().getString("title");
             if(page_title.equals("downloads")){
+                //Remove Details LinearLayout
+                detailsLinearLayout.setVisibility(View.INVISIBLE);
+
                 //Removes ImageDownloadButton from Layout
                 imageDownload.setVisibility(View.GONE);
 
@@ -285,6 +298,10 @@ public class SlideshowDialogFragment extends DialogFragment {
                 imageLove.setVisibility(View.VISIBLE);
             }
             if(page_title.equals("favs")){
+
+                //Remove Details LinearLayout
+                detailsLinearLayout.setVisibility(View.INVISIBLE);
+
                 imageDownload.setVisibility(View.GONE);
                 imageDelete.setVisibility(View.GONE);
                 imageShare.setVisibility(View.GONE);

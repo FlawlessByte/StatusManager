@@ -7,7 +7,6 @@ package fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -27,7 +25,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -47,7 +44,6 @@ import java.util.List;
 
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.SettingsPrefActivity;
-import co.realinventor.statusmanager.ViewActivity;
 import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
@@ -119,11 +115,21 @@ public class PlaceholderFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.i("SwipeRefreshLayout ", "onRefresh called from SwipeRefreshLayout");
-                Intent intent = new Intent(getActivity(), ViewActivity.class);
-                String title_value = (MEDIA_TYPE == FILE_IMAGE) ? "images" : "videos";
-                intent.putExtra("title",title_value);
-                getActivity().finish();
-                startActivity(intent);
+                processImages();
+                Collections.sort(images, Image.dateComparator);
+
+                for(Image i: images){
+                    allObjects.add(i);
+                }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                },600);
+                Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -165,6 +171,7 @@ public class PlaceholderFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
 
 
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getContext(), recyclerView, new GalleryAdapter.ClickListener() {
@@ -237,6 +244,9 @@ public class PlaceholderFragment extends Fragment {
     private void processImages(){
 
         ArrayList<String> fils;
+        MediaFiles.initMediaFiles();
+        allObjects.clear();
+        images.clear();
 
         if(MEDIA_TYPE == FILE_IMAGE){
             fils = MediaFiles.getImageFiles();
@@ -273,8 +283,6 @@ public class PlaceholderFragment extends Fragment {
             image.setLarge(PATH + i);
             image.setTime(new Date(file.lastModified()));
             images.add(image);
-
-
         }
     }
 
@@ -444,16 +452,22 @@ public class PlaceholderFragment extends Fragment {
 
             // Signal SwipeRefreshLayout to start the progress indicator
             swipeRefreshLayout.setRefreshing(true);
-            final Intent intent = new Intent(getActivity(), ViewActivity.class);
-            String title_value = (MEDIA_TYPE == FILE_IMAGE) ? "images" : "videos";
-            intent.putExtra("title",title_value);
+            processImages();
+            Collections.sort(images, Image.dateComparator);
+
+            for(Image i: images){
+                allObjects.add(i);
+            }
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getActivity().finish();
-                    startActivity(intent);
+                    mAdapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-            },1000);
+            },800);
+
+            Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
 
 
             return true;
