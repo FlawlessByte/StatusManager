@@ -48,16 +48,16 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
         // load settings fragment
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
-        builder.setMessage("Some of the options are not functional right now. It will be available later in updates. Sorry for the inconvenience.")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
-                        dialog.dismiss();
-                    }
-                });
-        builder.create();
-        builder.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+//        builder.setMessage("Some of the options are not functional right now. It will be available later in updates. Sorry for the inconvenience.")
+//                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // FIRE ZE MISSILES!
+//                        dialog.dismiss();
+//                    }
+//                });
+//        builder.create();
+//        builder.show();
 
     }
 
@@ -83,7 +83,9 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
             mRewardedVideoAd.setRewardedVideoAdListener(this);
 
             mRewardedVideoAd.loadAd("ca-app-pub-4525583199746587/6934978941",
-                    new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build());
+                    new AdRequest.Builder()
+//                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                            .build());
 
             Preference feedPref = findPreference(FEEDBACK_KEY);
             Preference ratePref = findPreference(RATE_APP_KEY);

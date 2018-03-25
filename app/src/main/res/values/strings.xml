@@ -9,7 +9,7 @@
         Do you want to free up some memory deleting expired status files?</string>
     <string name="free_whatsapp_summary2"> Don\'t worry, your saved files will be safe. It will only delete the expired remaining files
     from your Whatsapp status folder, not of saved status.</string>
-    <string name="about_pref">Realinventor</string>
+    <string name="about_pref">Developed by RealInventor</string>
 
 
 </resources>

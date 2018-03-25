@@ -25,7 +25,7 @@ public class MediaFiles {
     public static ArrayList<String> savedImageFiles = new ArrayList<>();
     public static ArrayList<String> savedFiles = new ArrayList<>();
     private static String APP_FOLDER_NAME = "StatusManager";
-    public static final String WHATSAPP_STATUS_FOLDER_PATH = Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/";
+    public static String WHATSAPP_STATUS_FOLDER_PATH = Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/";
     public static final String DOWNLOADED_IMAGE_PATH = Environment.getExternalStorageDirectory()+"/"+APP_FOLDER_NAME+"/Saved/";
 
 
@@ -70,7 +70,7 @@ public class MediaFiles {
 
 
     public static void initSavedFiles(){
-        File directory = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME+ "/Saved");
+        File directory = new File(DOWNLOADED_IMAGE_PATH);
         savedFiles.clear();
         savedVideoFiles.clear();
         savedImageFiles.clear();
@@ -105,7 +105,7 @@ public class MediaFiles {
     }
 
     public static boolean doesWhatsappDirExist(){
-        File dir = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
+        File dir = new File(WHATSAPP_STATUS_FOLDER_PATH);
         if(dir.exists() && dir.isDirectory()) {
             return true;
         }
@@ -135,7 +135,7 @@ public class MediaFiles {
         videoFiles.clear();
         allFiles.clear();
 
-        File directory = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
+        File directory = new File(WHATSAPP_STATUS_FOLDER_PATH);
 //        Log.d("Directory exists:",""+doesWhatsappDirExist());
         File[] files = directory.listFiles();
 
@@ -174,7 +174,7 @@ public class MediaFiles {
 
     public static float removeExpired(){
 
-        File directory = new File(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses");
+        File directory = new File(WHATSAPP_STATUS_FOLDER_PATH);
 //        Log.d("Directory exists:",""+doesWhatsappDirExist());
         File[] files = directory.listFiles();
         Date currentTime = new Date();
@@ -205,7 +205,4 @@ public class MediaFiles {
 
         return file_size_total;
     }
-
-
-
 }

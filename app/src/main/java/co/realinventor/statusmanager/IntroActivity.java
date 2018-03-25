@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +19,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,12 +36,15 @@ public class IntroActivity extends AppCompatActivity {
 
     private TextView textView;
     private Button button;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        SharedPreferences shared = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+        MediaFiles.WHATSAPP_STATUS_FOLDER_PATH = shared.getString("WHATSAPP_STATUS_FOLD_PATH",Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/");
 
 
 
@@ -47,6 +54,8 @@ public class IntroActivity extends AppCompatActivity {
 
         textView = (TextView)findViewById(R.id.textView);
         button = (Button)findViewById(R.id.buttonGone);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
 
 
         checkIfPermissionGranted();
@@ -175,10 +184,49 @@ public class IntroActivity extends AppCompatActivity {
             //Looks like the user does not have whatsapp
             Log.e("WhatsApp folder stat", "Doesn't exist");
             textView.setText("It looks like you don't have a Whatsapp Status folder in your system!");
+
+
+            //Check if GBWhatsapp
+            AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this, R.style.AlertDialogCustom);
+            builder.setTitle("Could not find Status folder!");
+            builder.setMessage("We could not find the folder that contains your Status media. This can happen if you don't have Whastapp installed" +
+                    " or if you are using GBWhatsapp. " +
+                    "Are you using GBWhatsapp? ");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+
+                    SharedPreferences sharedPref = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+                    //Change the value to false
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("WHATSAPP_STATUS_FOLD_PATH", Environment.getExternalStorageDirectory()+"/GBWhatsapp/Media/.Statuses/");
+                    editor.apply();
+
+                    Intent intent = new Intent(getApplication(), IntroActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            builder.setNeutralButton("I don't have Whatsapp", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    Toast.makeText(getApplication(), "This application cannot work unless you have Whatsapp installed!", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.show();
+
         }
         else{
 
-            textView.setText("Welcome!");
+            textView.setText("Status Saver");
 
             //Initialise Fav file
             try {
@@ -204,6 +252,8 @@ public class IntroActivity extends AppCompatActivity {
                     makeMediaScan();
 
 
+                    progressBar.setVisibility(View.INVISIBLE);
+
                     //First time continue button
                     button.setText("Continue");
                     button.setVisibility(View.VISIBLE);
@@ -218,6 +268,27 @@ public class IntroActivity extends AppCompatActivity {
 
                 }
                 else{
+                    progressBar.setVisibility(View.VISIBLE);
+                    final int totalProgressTime = 100;
+                    final Thread t = new Thread() {
+                        @Override
+                        public void run() {
+                            int jumpTime = 0;
+
+                            while(jumpTime < totalProgressTime) {
+                                try {
+                                    sleep(50);
+                                    jumpTime += 5;
+                                    progressBar.setProgress(jumpTime);
+                                } catch (InterruptedException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
+                    t.start();
+
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -225,7 +296,7 @@ public class IntroActivity extends AppCompatActivity {
                             finish();
                             startActivity(intent);
                         }
-                    },1000);
+                    },1300);
                 }
 
 

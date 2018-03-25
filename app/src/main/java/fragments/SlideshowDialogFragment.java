@@ -79,7 +79,9 @@ public class SlideshowDialogFragment extends DialogFragment {
         cont = container;
 
         mAdView = v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build();
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .build();
         mAdView.loadAd(adRequest);
 
         viewPager = (ViewPagerFixed) v.findViewById(R.id.viewpagerss);
@@ -379,7 +381,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     //Private File Access
     private void addFavs(String favs){
-        favs = favs.replace(Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses/","");
+        favs = favs.replace(MediaFiles.WHATSAPP_STATUS_FOLDER_PATH,"");
         favs = favs.replace(MediaFiles.DOWNLOADED_IMAGE_PATH, "");
         Log.d("Filename to be written",favs);
         boolean readingSuccess = false;

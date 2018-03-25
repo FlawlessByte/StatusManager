@@ -51,15 +51,18 @@ public class ViewActivity extends AppCompatActivity {
 
         //Banner ad
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build();
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .build();
         mAdView.loadAd(adRequest);
 
-//        AdRequest.Builder.addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17");
 
         //Interstial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
-        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build());
+        mInterstitialAd.loadAd(new AdRequest.Builder()
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .build());
 
 
         //Init media files
@@ -72,7 +75,6 @@ public class ViewActivity extends AppCompatActivity {
 
         //Tool bar thing
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextAppearance(this, R.style.CustomFontForToolBar);
         setSupportActionBar(toolbar);
 
 

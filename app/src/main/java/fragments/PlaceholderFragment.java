@@ -256,7 +256,7 @@ public class PlaceholderFragment extends Fragment {
         }
 
 
-        String PATH = Environment.getExternalStorageDirectory() + "/Whatsapp/Media/.Statuses/";
+        String PATH = MediaFiles.WHATSAPP_STATUS_FOLDER_PATH;
 
         //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
 
