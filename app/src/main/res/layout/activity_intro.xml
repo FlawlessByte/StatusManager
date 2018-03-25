@@ -28,6 +28,7 @@
         android:layout_margin="10dp"
         android:padding="8dp"
         android:typeface="sans"
+        android:fontFamily="@font/specialelite_regular"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
