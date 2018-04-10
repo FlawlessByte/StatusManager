@@ -129,7 +129,7 @@ public class PlaceholderFragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 },600);
-                Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.refreshed),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -197,7 +197,7 @@ public class PlaceholderFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT).show();
             }
         }));
 
@@ -390,7 +390,9 @@ public class PlaceholderFragment extends Fragment {
         }).build();
 
         // Load the Native Express ad.
-        adLoader.loadAd(new AdRequest.Builder().addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17").build());
+        adLoader.loadAd(new AdRequest.Builder()
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .build());
     }
 
     private void loadNativeAd() {
@@ -467,7 +469,7 @@ public class PlaceholderFragment extends Fragment {
                 }
             },800);
 
-            Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.refreshed),Toast.LENGTH_SHORT).show();
 
 
             return true;

@@ -43,7 +43,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/button_custom"
-        android:text="Continue"
+        android:text="@string/continue_to"
         android:textSize="14sp"
         android:visibility="gone"
         android:id="@+id/buttonGone"

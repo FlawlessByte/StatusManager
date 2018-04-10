@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:title="@string/general">
         <!--<CheckBoxPreference-->
             <!--android:defaultValue="false"-->
             <!--android:key="key_auto_download"-->
@@ -10,9 +10,9 @@
 
 
         <PreferenceScreen
-            android:summary="Clean up your Whatsapp status folder, removing expired files"
-            android:title="Free up some space?">
-            <PreferenceCategory android:title="Free up some space">
+            android:summary="@string/clean_up"
+            android:title="@string/free_up">
+            <PreferenceCategory android:title="@string/free_up">
                 <Preference
                     android:selectable="false"
                     android:summary="@string/free_whatsapp_summary1" />
@@ -23,7 +23,7 @@
                 <Preference android:selectable="false"/>
                 <Preference
                     android:key="key_free_whatsapp_fold"
-                    android:title="Click here to clean" />
+                    android:title="@string/click_here_to_clean" />
             </PreferenceCategory>
 
         </PreferenceScreen>
@@ -41,7 +41,7 @@
     <!--</PreferenceCategory>-->
 
 
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="@string/about">
 
     <Preference
         android:selectable="false"
@@ -49,22 +49,22 @@
 
     <Preference
         android:summary="1.1"
-        android:title="Version" />
+        android:title="@string/version" />
 
     <Preference
         android:key="key_feedback"
-        android:summary="Share what you feel about this app. Suggest edits."
-        android:title="Send Feedback" />
+        android:summary="@string/feedback_summary"
+        android:title="@string/send_feedback" />
 
     <Preference
         android:key="key_rate_app"
-        android:summary="Enjoying the app? Rate the app best!"
-        android:title="Rate the app" />
+        android:summary="@string/rate_app_summary"
+        android:title="@string/rate_app" />
 
     <Preference
         android:key="key_video_ad"
-        android:summary="Watch a video ad if you got some time."
-        android:title="Feeling bored? Or happy?" />
+        android:summary="@string/watch_ad_summary"
+        android:title="@string/watch_ad_title" />
 
     </PreferenceCategory>
 

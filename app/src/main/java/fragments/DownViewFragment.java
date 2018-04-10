@@ -103,7 +103,7 @@ public class DownViewFragment extends Fragment {
                     }
                 },800);
 
-                Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.refreshed),Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -133,7 +133,7 @@ public class DownViewFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Long clicked!",Toast.LENGTH_SHORT).show();
             }
         }));
 
@@ -163,9 +163,9 @@ public class DownViewFragment extends Fragment {
         if(getArguments().getString("title").equals("favs")){
             fils.clear();
             fils = getFavFiles();
-            for(String str : fils){
-                Log.d("Fav files ",str);
-            }
+//            for(String str : fils){
+//                Log.d("Fav files ",str);
+//            }
         }
 
 
@@ -314,7 +314,7 @@ public class DownViewFragment extends Fragment {
                 }
             },800);
 
-            Toast.makeText(getActivity(), "Refreshed!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.refreshed),Toast.LENGTH_SHORT).show();
 
             return true;
         }

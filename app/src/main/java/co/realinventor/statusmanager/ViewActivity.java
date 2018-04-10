@@ -52,7 +52,7 @@ public class ViewActivity extends AppCompatActivity {
         //Banner ad
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -61,7 +61,7 @@ public class ViewActivity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
         mInterstitialAd.loadAd(new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build());
 
 
@@ -138,9 +138,9 @@ public class ViewActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Exiting Application")
-                .setMessage("Are you sure you want to close this application?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.exiting_app))
+                .setMessage(getResources().getString(R.string.are_you_sure_exit))
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -191,7 +191,7 @@ public class ViewActivity extends AppCompatActivity {
                     }
 
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();

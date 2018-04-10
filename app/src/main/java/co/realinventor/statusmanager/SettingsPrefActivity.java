@@ -40,7 +40,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 //        setContentView(R.layout.activity_settings_pref);
 
 
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle(getResources().getString(R.string.settings));
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +84,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
             mRewardedVideoAd.loadAd("ca-app-pub-4525583199746587/6934978941",
                     new AdRequest.Builder()
-//                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                             .build());
 
             Preference feedPref = findPreference(FEEDBACK_KEY);
@@ -130,13 +130,13 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
                         freed_size = MediaFiles.removeExpired();
                     }
                     catch (Exception e){
-                        Toast.makeText(getActivity(),"Unsuccessful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),getResources().getString(R.string.unsuccessful), Toast.LENGTH_SHORT).show();
                     }
                     if(freed_size != 0){
-                        Toast.makeText(getActivity(), "Congrats! You have freed "+String.format("%.02f",freed_size)+ " MB of data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.u_freed_data,String.format("%.02f",freed_size)), Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Toast.makeText(getActivity(), "There are no expired files to delete!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.no_expired_files),Toast.LENGTH_SHORT).show();
                     }
 
                     return false;
@@ -204,42 +204,29 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onRewarded(RewardItem reward) {
-            Toast.makeText(getActivity(),"Thank you!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getResources().getString(R.string.thank_you),Toast.LENGTH_SHORT).show();
             // Reward the user.
         }
 
         @Override
-        public void onRewardedVideoAdLeftApplication() {
-
-        }
+        public void onRewardedVideoAdLeftApplication() {}
 
         @Override
-        public void onRewardedVideoAdClosed() {
-
-        }
+        public void onRewardedVideoAdClosed() {}
 
         @Override
         public void onRewardedVideoAdFailedToLoad(int errorCode) {
-            Toast.makeText(getActivity(),"Sorry, some error occured",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getResources().getString(R.string.sorry_some_error),Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onRewardedVideoAdLoaded() {
-
-        }
+        public void onRewardedVideoAdLoaded() {}
 
         @Override
-        public void onRewardedVideoAdOpened() {
-
-        }
+        public void onRewardedVideoAdOpened() {}
 
         @Override
-        public void onRewardedVideoStarted() {
-
-        }
-
-
-
+        public void onRewardedVideoStarted() {}
     }
 
     @Override
@@ -265,7 +252,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"jimmyjose.mec@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback from android app");
         intent.putExtra(Intent.EXTRA_TEXT, body);
-        context.startActivity(Intent.createChooser(intent, "Choose Email client"));
+        context.startActivity(Intent.createChooser(intent, context.getResources().getString(R.string.choose_email_client)));
     }
 
 

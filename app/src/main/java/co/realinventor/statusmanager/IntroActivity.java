@@ -46,20 +46,15 @@ public class IntroActivity extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
         MediaFiles.WHATSAPP_STATUS_FOLDER_PATH = shared.getString("WHATSAPP_STATUS_FOLD_PATH",Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/");
 
-
-
         //Admob initialization
         MobileAds.initialize(this, "ca-app-pub-4525583199746587~9357637931");
-
 
         textView = (TextView)findViewById(R.id.textView);
         button = (Button)findViewById(R.id.buttonGone);
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-
         checkIfPermissionGranted();
-
     }
 
 
@@ -83,23 +78,23 @@ public class IntroActivity extends AppCompatActivity {
 
                     //Show Information about why you need the permission
                     AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this, R.style.AlertDialogCustom);
-                    builder.setTitle("Need Storage Permission");
-                    builder.setMessage("This app needs read & write permission to access files in your system.");
-                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                    builder.setTitle(getResources().getString(R.string.permission_title));
+                    builder.setMessage(getResources().getString(R.string.permission_summary));
+                    builder.setPositiveButton(getResources().getString(R.string.permission_grant), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                             ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
                         }
                     });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(getResources().getString(R.string.permission_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
 
-                            textView.setText("Please provide the required privilleges and try again!");
+                            textView.setText(getResources().getString(R.string.permission_try_again));
                             button.setVisibility(View.VISIBLE);
-                            button.setText("Try Again!");
+                            button.setText(getResources().getString(R.string.try_again));
                             button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -119,6 +114,24 @@ public class IntroActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             1000);
+
+                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED){
+                        textView.setText(getResources().getString(R.string.permission_try_again));
+                        button.setVisibility(View.VISIBLE);
+                        button.setText(getResources().getString(R.string.try_again));
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                button.setVisibility(View.GONE);
+                                checkIfPermissionGranted();
+                            }
+                        });
+
+                    }
+                    else{
+                        proceedToViewActivity();
+                    }
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
@@ -156,9 +169,9 @@ public class IntroActivity extends AppCompatActivity {
 
                 } else {
 
-                    textView.setText("Please provide the required privilleges and try again!");
+                    textView.setText(getResources().getString(R.string.permission_try_again));
                     button.setVisibility(View.VISIBLE);
-                    button.setText("Try again!");
+                    button.setText(getResources().getString(R.string.try_again));
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -183,16 +196,14 @@ public class IntroActivity extends AppCompatActivity {
         if(!MediaFiles.doesWhatsappDirExist()){
             //Looks like the user does not have whatsapp
             Log.e("WhatsApp folder stat", "Doesn't exist");
-            textView.setText("It looks like you don't have a Whatsapp Status folder in your system!");
+            textView.setText(getResources().getString(R.string.whatsapp_fold_not_exist));
 
 
             //Check if GBWhatsapp
             AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this, R.style.AlertDialogCustom);
-            builder.setTitle("Could not find Status folder!");
-            builder.setMessage("We could not find the folder that contains your Status media. This can happen if you don't have Whastapp installed" +
-                    " or if you are using GBWhatsapp. " +
-                    "Are you using GBWhatsapp? ");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setTitle(getResources().getString(R.string.fold_not_found));
+            builder.setMessage(getResources().getString(R.string.gbwhatsapp_stat));
+            builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -208,17 +219,17 @@ public class IntroActivity extends AppCompatActivity {
 
                 }
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
             });
-            builder.setNeutralButton("I don't have Whatsapp", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(getResources().getString(R.string.no_whatsapp), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
-                    Toast.makeText(getApplication(), "This application cannot work unless you have Whatsapp installed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), getResources().getString(R.string.app_cannot_work), Toast.LENGTH_SHORT).show();
                 }
             });
             builder.show();
@@ -226,7 +237,7 @@ public class IntroActivity extends AppCompatActivity {
         }
         else{
 
-            textView.setText("Status Saver");
+            textView.setText(getResources().getString(R.string.app_name));
 
             //Initialise Fav file
             try {
@@ -255,7 +266,7 @@ public class IntroActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
 
                     //First time continue button
-                    button.setText("Continue");
+                    button.setText(getResources().getString(R.string.continue_to));
                     button.setVisibility(View.VISIBLE);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override

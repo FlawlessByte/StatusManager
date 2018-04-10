@@ -1,5 +1,6 @@
 package fragments;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,7 +8,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -60,11 +60,11 @@ public class SlideshowDialogFragment extends DialogFragment {
     private TextView lblCount, lblTitle, lblDate;
     private LinearLayout detailsLinearLayout;
     private int selectedPosition = 0;
-    private MediaController mc;
     private ImageButton imageDownload,imageShare,imageLove,imageDelete,imageUnlove;
     private String page_title = "unknown";
     private ViewGroup cont;
     private AdView mAdView;
+    private MediaController mc;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -80,7 +80,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -96,6 +96,8 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
         imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
+
+        mc = new MediaController(getContext());
 
 
 
@@ -160,7 +162,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                 String filepath = images.get(selectedPosition).getLarge();
                 Log.d("File to be downloaded",filepath);
                 MediaFiles.copyToDownload(filepath);
-                Toast.makeText(getActivity(),"File saved!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.file_saved),Toast.LENGTH_SHORT).show();
                 Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
                 imageDownload.startAnimation(anims);
                 Log.d("ImageButton", "Pressed");
@@ -181,11 +183,11 @@ public class SlideshowDialogFragment extends DialogFragment {
             public void onClick(View view) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
-                builder.setMessage("Add this to favourites?")
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                builder.setMessage(getActivity().getResources().getString(R.string.add_to_fav))
+                        .setPositiveButton(getActivity().getResources().getString(R.string.add), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // FIRE ZE MISSILES!
-                                Toast.makeText(getActivity(),"Added to favourites!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.added_to_fav),Toast.LENGTH_SHORT).show();
                                 imageLove.setBackgroundResource(R.drawable.ic_action_love_red);
                                 Animation anims = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
                                 imageLove.startAnimation(anims);
@@ -211,7 +213,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User cancelled the dialog
                             }
@@ -229,13 +231,14 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Preparing file for sharing..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.prepare_for_share), Toast.LENGTH_SHORT).show();
                 String filepath = images.get(selectedPosition).getLarge();
+                //Log.d("Intent share file", filepath);
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(filepath));
                 shareIntent.setType("image/jpeg");
-                startActivity(Intent.createChooser(shareIntent, "Shared with StatusManager"));
+                startActivity(Intent.createChooser(shareIntent, "Choose an app to share"));
             }
         });
 
@@ -243,9 +246,9 @@ public class SlideshowDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
-                builder.setMessage("Are you sure, you want to delete?")
-                        .setTitle("Alert!")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                builder.setMessage(getActivity().getResources().getString(R.string.are_u_sure_del))
+                        .setTitle(getActivity().getResources().getString(R.string.alert))
+                        .setPositiveButton(getActivity().getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // FIRE ZE MISSILES!
 
@@ -256,10 +259,10 @@ public class SlideshowDialogFragment extends DialogFragment {
                                 boolean deleted = file.delete();
 //                setCurrentItem(position+1);
                                 if(deleted){
-                                    Toast.makeText(getActivity(), "Deleted the file..", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.deleted_file), Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(getActivity(), "Could not delete..", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.could_not_delete), Toast.LENGTH_SHORT).show();
                                 }
 
                                 Intent intent = new Intent(getActivity(), ViewActivity.class);
@@ -270,7 +273,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User cancelled the dialog
                             }
@@ -319,8 +322,8 @@ public class SlideshowDialogFragment extends DialogFragment {
 
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
-                        builder.setMessage("Remove this from favourites?")
-                                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                        builder.setMessage(getActivity().getResources().getString(R.string.remove_from_fav))
+                                .setPositiveButton(getActivity().getResources().getString(R.string.remove), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // FIRE ZE MISSILES!
                                         String file_name_to_be_removed = images.get(position).getLarge();
@@ -331,7 +334,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                                             try {
                                                 Log.e("Try catch", "Enters here");
                                                 removeLine(file, index);
-                                                Toast.makeText(getActivity(),"Removed from favourites",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.removed_from_fav),Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(getActivity(), ViewActivity.class);
                                                 intent.putExtra("title","favs");
                                                 getActivity().finish();
@@ -345,7 +348,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // User cancelled the dialog
                                     }
@@ -510,6 +513,14 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 Image video = images.get(position);
 
+//                mc = new MediaController(getActivity()){
+//                    @Override
+//                    public void show (int timeout){
+//                        if(timeout == 3000) timeout = 20000; //Set to desired number
+//                        super.show(timeout);
+//                    }
+//                };
+
                 final VideoView videoView = (VideoView) view.findViewById(R.id.video_preview);
 
                 videoView.setVisibility(View.VISIBLE);
@@ -525,9 +536,12 @@ public class SlideshowDialogFragment extends DialogFragment {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
                         Log.d("On prepared ", "video prepared");
-                        mc = new MediaController(getActivity());
-                        videoView.setMediaController(mc);
+//                        mc = new MediaController(getActivity());
                         mc.setAnchorView(videoView);
+                        videoView.setMediaController(mc);
+                        videoView.requestFocus();
+                        mc.setEnabled(true);
+                        mc.show(5000);
                     }
                 });
 
