@@ -64,7 +64,6 @@ public class SlideshowDialogFragment extends DialogFragment {
     private String page_title = "unknown";
     private ViewGroup cont;
     private AdView mAdView;
-    private MediaController mc;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -96,9 +95,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageLove =(ImageButton)v.findViewById(R.id.imageLoveButton);
         imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
-
-        mc = new MediaController(getContext());
-
 
 
         setListeners(getArguments().getInt("position"));
@@ -484,6 +480,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     public class MyViewPagerAdapter extends PagerAdapter {
 
         private LayoutInflater layoutInflater;
+        private MediaController mc;
 
         public MyViewPagerAdapter() {
         }
@@ -513,14 +510,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 Image video = images.get(position);
 
-//                mc = new MediaController(getActivity()){
-//                    @Override
-//                    public void show (int timeout){
-//                        if(timeout == 3000) timeout = 20000; //Set to desired number
-//                        super.show(timeout);
-//                    }
-//                };
-
+                mc = new MediaController(getActivity());
                 final VideoView videoView = (VideoView) view.findViewById(R.id.video_preview);
 
                 videoView.setVisibility(View.VISIBLE);
