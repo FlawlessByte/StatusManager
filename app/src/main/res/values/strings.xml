@@ -11,7 +11,6 @@
     <string name="about_pref">Developed by RealInventor</string>
 
 
-
     <!--IntroActivity -->
     <string name="permission_title">Need Storage Permission</string>
     <string name="permission_summary">This app needs read &amp; write permission to access files in your system.</string>
@@ -43,6 +42,7 @@
     <string name="thank_you">Thank You!</string>
     <string name="sorry_some_error">Sorry, some error occured.</string>
     <string name="choose_email_client">Choose Email client</string>
+    <string name="video_not_loaded">Ad video not yet loaded</string>
 
 
     <!-- Fragments -->

@@ -56,4 +56,5 @@
     <string name="watch_ad_summary">Regardez une publicité vidéo si vous avez un peu de temps.</string>
     <string name="watch_ad_title">S\'ennuyer? Ou heureux?</string>
     <string name="about">Sur</string>
+    <string name="video_not_loaded">La vidéo publicitaire n\'est pas encore chargée</string>
 </resources>

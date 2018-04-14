@@ -56,4 +56,5 @@
     <string name="watch_ad_summary">Guarda un annuncio video, se hai un po \'di tempo.</string>
     <string name="watch_ad_title">Annoiarsi? O felice?</string>
     <string name="about">Riguardo a noi</string>
+    <string name="video_not_loaded">Il video pubblicitario non è ancora stato caricato</string>
 </resources>

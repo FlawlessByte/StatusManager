@@ -56,4 +56,5 @@
     <string name="watch_ad_title">Sentirse aburrido? O feliz?</string>
     <string name="about">sobre nosotros</string>
     <string name="title_activity_view">ViewActivity</string>
+    <string name="video_not_loaded">El video publicitario aún no se ha cargado</string>
 </resources>

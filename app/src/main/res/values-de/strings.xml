@@ -56,4 +56,5 @@
     <string name="watch_ad_summary">Sehen Sie eine Video-Anzeige, wenn Sie einige Zeit.</string>
     <string name="watch_ad_title">Langeweile? Oder glücklich?</string>
     <string name="about">Über uns</string>
+    <string name="video_not_loaded">Werbevideo ist noch nicht geladen</string>
 </resources>

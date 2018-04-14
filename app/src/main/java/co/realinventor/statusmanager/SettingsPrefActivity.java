@@ -37,27 +37,12 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_settings_pref);
-
 
         getSupportActionBar().setTitle(getResources().getString(R.string.settings));
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // load settings fragment
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
-//        builder.setMessage("Some of the options are not functional right now. It will be available later in updates. Sorry for the inconvenience.")
-//                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // FIRE ZE MISSILES!
-//                        dialog.dismiss();
-//                    }
-//                });
-//        builder.create();
-//        builder.show();
 
     }
 
@@ -115,8 +100,10 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
                     if (mRewardedVideoAd.isLoaded()) {
                         mRewardedVideoAd.show();
                     }
-                    else
+                    else {
                         Log.d("Pref", "Rewarded video not loaded");
+                        Toast.makeText(getActivity(),getResources().getString(R.string.video_not_loaded),Toast.LENGTH_SHORT).show();
+                    }
                     return false;
                 }
             });

@@ -1,6 +1,5 @@
 package fragments;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,16 +7,20 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -45,6 +48,7 @@ import java.util.List;
 import java.util.Scanner;
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.ViewActivity;
+import helpers.AdViewInfo;
 import helpers.Favourites;
 import helpers.Image;
 import helpers.MediaFiles;
@@ -64,6 +68,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private String page_title = "unknown";
     private ViewGroup cont;
     private AdView mAdView;
+    private AdRequest adRequest;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -78,7 +83,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         cont = container;
 
         mAdView = v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
+        adRequest = new AdRequest.Builder()
                 .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
         mAdView.loadAd(adRequest);
@@ -97,8 +102,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
 
 
-        setListeners(getArguments().getInt("position"));
-
 
         allObjects = (ArrayList<Object>) getArguments().getSerializable("images");
 
@@ -109,6 +112,8 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
 
         selectedPosition = getArguments().getInt("position");
+
+        setListeners(getArguments().getInt("position"));
 
         Log.e(TAG, "position: " + selectedPosition);
         Log.e(TAG, "images size: " + images.size());
@@ -280,6 +285,19 @@ public class SlideshowDialogFragment extends DialogFragment {
             }
         });
 
+        if(images.get(selectedPosition).isVideo()){
+            detailsLinearLayout.setVisibility(View.INVISIBLE);
+            mAdView.setVisibility(View.INVISIBLE);
+            mAdView.destroy();
+            AdViewInfo.isSlideShowBannerAlive = false;
+        }
+        else{
+            //Checks if adview is already loaded?
+            if(!AdViewInfo.isSlideShowBannerAlive)
+                mAdView.loadAd(adRequest);
+            mAdView.setVisibility(View.VISIBLE);
+        }
+
         try{
             page_title = getArguments().getString("title");
             if(page_title.equals("downloads")){
@@ -428,8 +446,6 @@ public class SlideshowDialogFragment extends DialogFragment {
             }
 
         }
-
-
     }
 
     public int getLineIndex(String line_str){
@@ -489,7 +505,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         public Object instantiateItem(ViewGroup container, int position) {
 
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
+            final View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
 
             if(!(images.get(position).isVideo())){
@@ -508,55 +524,108 @@ public class SlideshowDialogFragment extends DialogFragment {
             }
             else{
 
-                Image video = images.get(position);
+                final Image video = images.get(position);
 
                 mc = new MediaController(getActivity());
                 final VideoView videoView = (VideoView) view.findViewById(R.id.video_preview);
+                videoView.setMediaController(mc);
 
                 videoView.setVisibility(View.VISIBLE);
                 Log.d("Video to be played ",video.getLarge());
                 String large = video.getLarge();
                 videoView.setVideoURI(Uri.parse(large));
 
-                videoView.requestFocus();
 
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                lp.gravity = Gravity.BOTTOM;
+                mc.setLayoutParams(lp);
+
+                ((ViewGroup) mc.getParent()).removeView(mc);
+
+                ((FrameLayout) view.findViewById(R.id.frameLayout)).addView(mc);
+                ((FrameLayout) view.findViewById(R.id.frameLayout)).setVisibility(View.VISIBLE);
+                
+                videoView.requestFocus();
                 videoView.seekTo(10);
 
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
                         Log.d("On prepared ", "video prepared");
-//                        mc = new MediaController(getActivity());
                         mc.setAnchorView(videoView);
-                        videoView.setMediaController(mc);
                         videoView.requestFocus();
-                        mc.setEnabled(true);
-                        mc.show(5000);
+                        mc.show();
                     }
                 });
 
+                final Handler handler = new Handler();
+                final Runnable runnable = new Runnable() {
 
-               videoView.setOnTouchListener(new View.OnTouchListener() {
-                   @Override
-                   public boolean onTouch(View view, MotionEvent motionEvent) {
-                       if(videoView.isPlaying()){
-                           videoView.pause();
-                       }
-                       else{
-                           videoView.start();
-                       }
-                       return false;
-                   }
-               });
+                    @Override
+                    public void run() {
+                        try{
+                            //do your code here
+//                            Log.d("Event dispatcher", "Running");
+
+                            long downTime = SystemClock.uptimeMillis();
+                            long eventTime = SystemClock.uptimeMillis() + 100;
+                            float y = getActivity().getResources().getDisplayMetrics().widthPixels;
+                            float x = getActivity().getResources().getDisplayMetrics().heightPixels;
+//                            Log.d("Event dispatcher y cord", ""+y);
+//                            Log.d("Event dispatcher x cord", ""+x);
+                            // List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
+                            int metaState = 0;
+                            MotionEvent motionEvent = MotionEvent.obtain(
+                                    downTime,
+                                    eventTime,
+                                    MotionEvent.ACTION_UP,
+                                    x,
+                                    y,
+                                    metaState
+                            );
+
+                            videoView.dispatchTouchEvent(motionEvent);
+
+                        }
+                        catch (Exception e) {
+                            // TODO: handle exception
+                            Log.d("Event dispatcher", "Exception");
+                        }
+                        finally{
+                            //also call the same runnable to call it at regular interval
+                            handler.postDelayed(this, 3000);
+                            Log.d("Event dispatcher", "Calling again");
+                        }
+                    }
+                };
+
+
+
+//               videoView.setOnTouchListener(new View.OnTouchListener() {
+//                   @Override
+//                   public boolean onTouch(View view, MotionEvent motionEvent) {
+//                       if(videoView.isPlaying()){
+//                           videoView.pause();
+//                       }
+//                       else{
+//                           videoView.start();
+//                       }
+//                       return false;
+//                   }
+//               });
 
 
                 videoView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean hasFocus) {
-                        if (hasFocus)
+                        if (hasFocus){
                             videoView.start();
-                        else
+                            handler.postDelayed(runnable, 500);
+                        }
+                        else {
                             videoView.pause();
+                            handler.removeCallbacks(runnable);
+                        }
                     }
                 });
 
@@ -565,9 +634,9 @@ public class SlideshowDialogFragment extends DialogFragment {
 
             }
 
+
             return view;
         }
-
 
         @Override
         public int getCount() {
@@ -586,6 +655,4 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
 
     }
-
-
 }

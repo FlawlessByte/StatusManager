@@ -56,4 +56,5 @@
     <string name="watch_ad_summary">Kyk na \'n video-advertensie as jy \'n geruime tyd het.</string>
     <string name="watch_ad_title">Voel verveeld? Of gelukkig?</string>
     <string name="about">oor ons</string>
+    <string name="video_not_loaded">Advertensie video is nog nie gelaai nie</string>
 </resources>
