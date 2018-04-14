@@ -26,7 +26,6 @@ import helpers.MediaFiles;
 import helpers.ViewPagerFixed;
 
 public class ViewActivity extends AppCompatActivity {
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -56,14 +55,12 @@ public class ViewActivity extends AppCompatActivity {
                 .build();
         mAdView.loadAd(adRequest);
 
-
         //Interstial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
         mInterstitialAd.loadAd(new AdRequest.Builder()
                 .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build());
-
 
         //Init media files
         MediaFiles.initMediaFiles();
@@ -103,8 +100,6 @@ public class ViewActivity extends AppCompatActivity {
         } else if (intent_title.equals("favs")) {
             mViewPager.setCurrentItem(3);
         }
-
-
     }
 
     //Menu thing
@@ -121,13 +116,11 @@ public class ViewActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(ViewActivity.this, SettingsPrefActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -199,5 +192,4 @@ public class ViewActivity extends AppCompatActivity {
                 })
                 .show();
     }
-
 }

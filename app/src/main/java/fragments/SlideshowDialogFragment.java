@@ -75,7 +75,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         return f;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -101,8 +100,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         imageDelete =(ImageButton)v.findViewById(R.id.imageDeleteButton);
         imageUnlove =(ImageButton)v.findViewById(R.id.imageUnloveButton);
 
-
-
         allObjects = (ArrayList<Object>) getArguments().getSerializable("images");
 
         for(Object obj: allObjects){
@@ -112,9 +109,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
 
         selectedPosition = getArguments().getInt("position");
-
         setListeners(getArguments().getInt("position"));
-
         Log.e(TAG, "position: " + selectedPosition);
         Log.e(TAG, "images size: " + images.size());
 
@@ -127,7 +122,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         return v;
     }
 
-
     private void setCurrentItem(int position) {
         viewPager.setCurrentItem(position, false);
         displayMetaInfo(selectedPosition);
@@ -135,7 +129,6 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     //  page change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
         @Override
         public void onPageSelected(int position) {
             displayMetaInfo(position);
@@ -143,23 +136,18 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
 
         @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
+        public void onPageScrolled(int arg0, float arg1, int arg2) {}
 
         @Override
-        public void onPageScrollStateChanged(int arg0) {
+        public void onPageScrollStateChanged(int arg0) {}
 
-        }
     };
 
     private void setListeners(final int position){
         final int selectedPosition = position;
-
         imageDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String filepath = images.get(selectedPosition).getLarge();
                 Log.d("File to be downloaded",filepath);
                 MediaFiles.copyToDownload(filepath);
@@ -175,14 +163,12 @@ public class SlideshowDialogFragment extends DialogFragment {
                         new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 intent.setData(Uri.fromFile(file));
                 getActivity().sendBroadcast(intent);
-
             }
         });
 
         imageLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
                 builder.setMessage(getActivity().getResources().getString(R.string.add_to_fav))
                         .setPositiveButton(getActivity().getResources().getString(R.string.add), new DialogInterface.OnClickListener() {
@@ -194,9 +180,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                                 imageLove.startAnimation(anims);
                                 anims.setAnimationListener(new Animation.AnimationListener() {
                                     @Override
-                                    public void onAnimationStart(Animation animation) {
-
-                                    }
+                                    public void onAnimationStart(Animation animation) {}
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
@@ -204,14 +188,11 @@ public class SlideshowDialogFragment extends DialogFragment {
                                     }
 
                                     @Override
-                                    public void onAnimationRepeat(Animation animation) {
+                                    public void onAnimationRepeat(Animation animation) {}
 
-                                    }
                                 });
                                 Log.d("ImageButton", "Pressed");
                                 addFavs(images.get(selectedPosition).getLarge());
-
-
                             }
                         })
                         .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -221,13 +202,8 @@ public class SlideshowDialogFragment extends DialogFragment {
                         });
                 builder.create();
                 builder.show();
-
-
-
             }
         });
-
-
 
         imageShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +228,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                         .setPositiveButton(getActivity().getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // FIRE ZE MISSILES!
-
                                 imageDelete.setBackgroundResource(R.drawable.ic_action_delete_red);
 
                                 File file = new File(images.get(position).getLarge());
@@ -265,13 +240,10 @@ public class SlideshowDialogFragment extends DialogFragment {
                                 else{
                                     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.could_not_delete), Toast.LENGTH_SHORT).show();
                                 }
-
                                 Intent intent = new Intent(getActivity(), ViewActivity.class);
                                 intent.putExtra("title","downloads");
                                 getActivity().finish();
                                 startActivity(intent);
-
-
                             }
                         })
                         .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -281,7 +253,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                         });
                 builder.create();
                 builder.show();
-
             }
         });
 
@@ -300,7 +271,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         try{
             page_title = getArguments().getString("title");
-            if(page_title.equals("downloads")){
+            if(page_title.equals("downloads")){  //Download page
                 //Remove Details LinearLayout
                 detailsLinearLayout.setVisibility(View.INVISIBLE);
 
@@ -312,28 +283,23 @@ public class SlideshowDialogFragment extends DialogFragment {
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 imageShare.setLayoutParams(params);
 
-                //Make delete button visible
+                //Make delete, fav button visible
                 imageDelete.setVisibility(View.VISIBLE);
                 imageLove.setVisibility(View.VISIBLE);
             }
-            if(page_title.equals("favs")){
-
-                //Remove Details LinearLayout
+            if(page_title.equals("favs")){   //The selected tab is favs
+                //Remove Details LinearLayout, and other views
                 detailsLinearLayout.setVisibility(View.INVISIBLE);
-
                 imageDownload.setVisibility(View.GONE);
                 imageDelete.setVisibility(View.GONE);
                 imageShare.setVisibility(View.GONE);
                 imageLove.setVisibility(View.GONE);
                 imageUnlove.setVisibility(View.VISIBLE);
-
                 imageUnlove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //write some code to delete file name entry from file
                         Log.d("Unlove button",  "Clicked");
-
-
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
                         builder.setMessage(getActivity().getResources().getString(R.string.remove_from_fav))
@@ -358,8 +324,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                                                 Log.e("IOException at Unlove", "could not remove line");
                                             }
                                         }
-
-
                                     }
                                 })
                                 .setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -369,7 +333,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                                 });
                         builder.create();
                         builder.show();
-
                     }
                 });
             }
@@ -377,16 +340,13 @@ public class SlideshowDialogFragment extends DialogFragment {
         catch (Exception e){
             Log.d("Default tabs","Neglected");
         }
-
     }
 
     private void displayMetaInfo(int position) {
-
         lblCount.setText((position + 1) + " of " + images.size());
         Image image = images.get(position);
         lblTitle.setText(image.getSize());
         lblDate.setText(image.getTimestamp());
-
     }
 
     @Override
@@ -403,14 +363,11 @@ public class SlideshowDialogFragment extends DialogFragment {
         Log.d("Filename to be written",favs);
         boolean readingSuccess = false;
         ArrayList<String> lines = new ArrayList<>();
-
         try{
             FileInputStream fis = getActivity().openFileInput(Favourites.FAV_FILENAME);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
-
             String line;
-
             while ((line = bufferedReader.readLine()) != null) {
                 Log.d("String lines", line);
                 lines.add(line);
@@ -442,9 +399,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                 catch (IOException ioexc){
                     ioexc.printStackTrace();
                 }
-
             }
-
         }
     }
 
@@ -454,10 +409,8 @@ public class SlideshowDialogFragment extends DialogFragment {
             FileInputStream fis = getActivity().openFileInput(Favourites.FAV_FILENAME);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
-
             String line;
             int nom_index = 0;
-
             while ((line = bufferedReader.readLine()) != null) {
                 Log.d("String lines", line);
                 if(line.equals(line_str)){
@@ -476,7 +429,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         return index;
     }
 
-
     public void removeLine(final File file, final int lineIndex) throws IOException{
         final List<String> lines = new LinkedList<>();
         final Scanner reader = new Scanner(new FileInputStream(file), "UTF-8");
@@ -492,9 +444,8 @@ public class SlideshowDialogFragment extends DialogFragment {
         writer.close();
     }
 
-    //	adapter
+    //	Adapter class
     public class MyViewPagerAdapter extends PagerAdapter {
-
         private LayoutInflater layoutInflater;
         private MediaController mc;
 
@@ -503,12 +454,11 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
-
             if(!(images.get(position).isVideo())){
+                //The content is an image
                 PhotoView photoView = (PhotoView) view.findViewById(R.id.image_preview);
                 photoView.setVisibility(View.VISIBLE);
 
@@ -523,7 +473,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                 container.addView(view);
             }
             else{
-
+                //The content is video
                 final Image video = images.get(position);
 
                 mc = new MediaController(getActivity());
@@ -535,7 +485,7 @@ public class SlideshowDialogFragment extends DialogFragment {
                 String large = video.getLarge();
                 videoView.setVideoURI(Uri.parse(large));
 
-
+                //Set MediaController anchored to Framelayour
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 lp.gravity = Gravity.BOTTOM;
                 mc.setLayoutParams(lp);
@@ -544,7 +494,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 ((FrameLayout) view.findViewById(R.id.frameLayout)).addView(mc);
                 ((FrameLayout) view.findViewById(R.id.frameLayout)).setVisibility(View.VISIBLE);
-                
+
                 videoView.requestFocus();
                 videoView.seekTo(10);
 
@@ -566,7 +516,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                         try{
                             //do your code here
 //                            Log.d("Event dispatcher", "Running");
-
                             long downTime = SystemClock.uptimeMillis();
                             long eventTime = SystemClock.uptimeMillis() + 100;
                             float y = getActivity().getResources().getDisplayMetrics().widthPixels;
@@ -585,7 +534,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                             );
 
                             videoView.dispatchTouchEvent(motionEvent);
-
                         }
                         catch (Exception e) {
                             // TODO: handle exception
@@ -598,22 +546,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                         }
                     }
                 };
-
-
-
-//               videoView.setOnTouchListener(new View.OnTouchListener() {
-//                   @Override
-//                   public boolean onTouch(View view, MotionEvent motionEvent) {
-//                       if(videoView.isPlaying()){
-//                           videoView.pause();
-//                       }
-//                       else{
-//                           videoView.start();
-//                       }
-//                       return false;
-//                   }
-//               });
-
 
                 videoView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
@@ -629,12 +561,8 @@ public class SlideshowDialogFragment extends DialogFragment {
                     }
                 });
 
-
                 container.addView(view);
-
             }
-
-
             return view;
         }
 
@@ -648,11 +576,9 @@ public class SlideshowDialogFragment extends DialogFragment {
             return view == ((View) obj);
         }
 
-
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-
     }
 }

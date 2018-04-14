@@ -31,19 +31,6 @@
         <activity android:name=".SettingsPrefActivity"
          android:theme="@style/PreferencesTheme" />
 
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <receiver
-            android:name=".NetworkStateReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

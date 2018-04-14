@@ -134,44 +134,44 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Intent intent = new Intent(getActivity(), MyService.class);
-            intent.putExtra("KEY1", "Value to be used by the service");
-
-            if(key.equals(AUTODOWNLOAD_KEY)){
-                Preference preference = findPreference(key);
-                if(sharedPreferences.getBoolean(AUTODOWNLOAD_KEY, false)){
-                    Log.d("AUto download","Enabled");
-                    getActivity().startService(intent);
-
-                }
-                else{
-                    Log.d("AUto download","Disabled");
-                    if(sharedPreferences.getBoolean(NOTIFICATION_KEY, false)) {
-                        getActivity().stopService(intent);
-                        getActivity().startService(intent);
-                    }
-                    else{
-                        getActivity().stopService(intent);
-                    }
-                }
-            }
-            if(key.equals(NOTIFICATION_KEY)){
-                Preference preference = findPreference(key);
-                if(sharedPreferences.getBoolean(NOTIFICATION_KEY, false)){
-                    Log.d("Notifications","Enabled");
-                    getActivity().startService(intent);
-                }
-                else{
-                    Log.d("Notifications","Disabled");
-                    if(sharedPreferences.getBoolean(AUTODOWNLOAD_KEY, false)) {
-                        getActivity().stopService(intent);
-                        getActivity().startService(intent);
-                    }
-                    else{
-                        getActivity().stopService(intent);
-                    }
-                }
-            }
+//            Intent intent = new Intent(getActivity(), MyService.class);
+//            intent.putExtra("KEY1", "Value to be used by the service");
+//
+//            if(key.equals(AUTODOWNLOAD_KEY)){
+//                Preference preference = findPreference(key);
+//                if(sharedPreferences.getBoolean(AUTODOWNLOAD_KEY, false)){
+//                    Log.d("AUto download","Enabled");
+//                    getActivity().startService(intent);
+//
+//                }
+//                else{
+//                    Log.d("AUto download","Disabled");
+//                    if(sharedPreferences.getBoolean(NOTIFICATION_KEY, false)) {
+//                        getActivity().stopService(intent);
+//                        getActivity().startService(intent);
+//                    }
+//                    else{
+//                        getActivity().stopService(intent);
+//                    }
+//                }
+//            }
+//            if(key.equals(NOTIFICATION_KEY)){
+//                Preference preference = findPreference(key);
+//                if(sharedPreferences.getBoolean(NOTIFICATION_KEY, false)){
+//                    Log.d("Notifications","Enabled");
+//                    getActivity().startService(intent);
+//                }
+//                else{
+//                    Log.d("Notifications","Disabled");
+//                    if(sharedPreferences.getBoolean(AUTODOWNLOAD_KEY, false)) {
+//                        getActivity().stopService(intent);
+//                        getActivity().startService(intent);
+//                    }
+//                    else{
+//                        getActivity().stopService(intent);
+//                    }
+//                }
+//            }
         }
 
         @Override

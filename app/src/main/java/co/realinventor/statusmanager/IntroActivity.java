@@ -160,13 +160,9 @@ public class IntroActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-
                     proceedToViewActivity();
-
-
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-
                 } else {
 
                     textView.setText(getResources().getString(R.string.permission_try_again));
@@ -309,19 +305,11 @@ public class IntroActivity extends AppCompatActivity {
                         }
                     },1300);
                 }
-
-
-
                 Log.d("Shared pref try", "");
             }
             catch (Exception e){
                 Log.d("SHared pref ", "Not found 1");
             }
-
-
-
-
-
         }
     }
 
@@ -349,7 +337,5 @@ public class IntroActivity extends AppCompatActivity {
                                 "file " + path + " was scanned seccessfully: " + uri);
                     }
                 });
-
     }
-
 }

@@ -43,14 +43,12 @@ import helpers.MediaFiles;
  */
 
 public class DownViewFragment extends Fragment {
-
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Image> images;
     private ArrayList<Object> allObjects;
     private int GRID_COUNT = 3;
     private SwipeRefreshLayout swipeRefreshLayout;
-
 
     public DownViewFragment(){};
 
@@ -65,7 +63,6 @@ public class DownViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
 
-
         try {
             SharedPreferences sharedPref = getActivity().getSharedPreferences("GRID_NUMBERS", Context.MODE_PRIVATE);
             if(getArguments().getString("title").equals("favs")) {
@@ -79,7 +76,6 @@ public class DownViewFragment extends Fragment {
         catch (Exception e){
             Log.d("SHared pref ", "Not found 1");
         }
-
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
@@ -153,7 +149,6 @@ public class DownViewFragment extends Fragment {
     private void processImages(){
 
         ArrayList<String> fils;
-
         images.clear();
         allObjects.clear();
         mAdapter.notifyDataSetChanged();
@@ -168,18 +163,14 @@ public class DownViewFragment extends Fragment {
 //            }
         }
 
-
-
         //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
 
         android.text.format.DateFormat df = new android.text.format.DateFormat();
-
 
         for (String i:fils){
             Image image = new Image();
             File file = new File(MediaFiles.DOWNLOADED_IMAGE_PATH+i);
             Date date = new Date(file.lastModified());
-
 
             String DATA_TAG = "KB";
             String FILE_SIZE = String.format("%.02f", (file.length() / 1024.0));
@@ -195,8 +186,6 @@ public class DownViewFragment extends Fragment {
             image.setLarge(MediaFiles.DOWNLOADED_IMAGE_PATH + i);
             image.setTime(new Date(file.lastModified()));
             images.add(image);
-
-
         }
     }
 
@@ -233,7 +222,6 @@ public class DownViewFragment extends Fragment {
                 iter.remove();
             }
         }
-
         return lines;
     }
 
@@ -257,7 +245,6 @@ public class DownViewFragment extends Fragment {
             startActivity(new Intent(getActivity(), SettingsPrefActivity.class));
             return true;
         }
-
 
         if(id == R.id.action_grid){
 
@@ -288,10 +275,6 @@ public class DownViewFragment extends Fragment {
             recyclerView.setLayoutManager(mLayoutManager);
         }
 
-
-
-
-
         if(id == R.id.action_refresh){
             Log.i("Menu refresh", "Refresh menu item selected");
 
@@ -304,8 +287,6 @@ public class DownViewFragment extends Fragment {
                 allObjects.add(i);
             }
 
-
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -315,10 +296,8 @@ public class DownViewFragment extends Fragment {
             },800);
 
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.refreshed),Toast.LENGTH_SHORT).show();
-
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
