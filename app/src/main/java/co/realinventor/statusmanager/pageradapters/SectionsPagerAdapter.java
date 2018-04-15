@@ -29,12 +29,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0:
                 Bundle args1 = new Bundle();
+                args1.putString("title","images");
                 args1.putInt("TYPE_MEDIA",PlaceholderFragment.FILE_IMAGE);
                 PlaceholderFragment fragment1 = new PlaceholderFragment();
                 fragment1.setArguments(args1);
                 return fragment1;
             case 1:
                 Bundle args2 = new Bundle();
+                args2.putString("title","videos");
                 args2.putInt("TYPE_MEDIA",PlaceholderFragment.FILE_VIDEO);
                 PlaceholderFragment fragment2 = new PlaceholderFragment();
                 fragment2.setArguments(args2);
@@ -59,7 +61,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
+        // Show 4 total pages.
         return 4;
     }
 

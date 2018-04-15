@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StatusSaver</string>
+    <string name="app_name">Descargador de estado</string>
     <string name="action_settings">ajustes</string>
     <string name="free_whatsapp_summary1">"Alguna vez ha encontrado algunos archivos de su carpeta de estado de WhatsApp Status que son más de 24 horas y se mantiene sin borrar durante mucho tiempo? Pueden consumir su espacio de memoria. ¿Quieres liberar algo de memoria borrando archivos de estado caducados? "</string>
     <string name="free_whatsapp_summary2">"No se preocupe, los archivos guardados serán seguros. Sólo se eliminará el resto de archivos caducados de la carpeta de estado de WhatsApp, no de estado guardado. "</string>

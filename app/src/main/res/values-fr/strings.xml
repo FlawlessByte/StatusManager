@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StatusSaver</string>
+    <string name="app_name">Statut téléchargeur</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="action_settings">Paramètres</string>
     <string name="free_whatsapp_summary1">Avez-vous déjà rencontré des fichiers de votre dossier Whatsapp Status datant de plus de 24 heures et qui n\'ont pas été supprimés depuis longtemps? Ils peuvent consommer votre espace de mémoire. Voulez-vous libérer de la mémoire en supprimant les fichiers d\'état expirés?</string>

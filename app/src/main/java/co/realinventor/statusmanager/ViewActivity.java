@@ -51,7 +51,7 @@ public class ViewActivity extends AppCompatActivity {
         //Banner ad
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -59,7 +59,7 @@ public class ViewActivity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
         mInterstitialAd.loadAd(new AdRequest.Builder()
-                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build());
 
         //Init media files

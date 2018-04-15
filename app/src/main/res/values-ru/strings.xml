@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StatusSaver</string>
+    <string name="app_name">Статус загрузчика</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="watch_ad_summary">Смотрите видеорекламу, если у вас есть время.</string>
     <string name="action_settings">настройки</string>

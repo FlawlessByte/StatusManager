@@ -83,7 +83,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         mAdView = v.findViewById(R.id.adView);
         adRequest = new AdRequest.Builder()
-                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -551,7 +551,10 @@ public class SlideshowDialogFragment extends DialogFragment {
                     @Override
                     public void onFocusChange(View view, boolean hasFocus) {
                         if (hasFocus){
-                            videoView.start();
+
+                            page_title = getArguments().getString("title");
+                            if(!(page_title.equals("downloads") || page_title.equals("favs")))
+                                videoView.start();
                             handler.postDelayed(runnable, 500);
                         }
                         else {

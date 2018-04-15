@@ -69,7 +69,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
             mRewardedVideoAd.loadAd("ca-app-pub-4525583199746587/6934978941",
                     new AdRequest.Builder()
-                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                             .build());
 
             Preference feedPref = findPreference(FEEDBACK_KEY);

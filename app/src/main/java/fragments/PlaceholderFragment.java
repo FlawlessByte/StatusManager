@@ -139,6 +139,7 @@ public class PlaceholderFragment extends Fragment {
                 else {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("images", allObjects);
+                    bundle.putString("title", getArguments().getString("title"));
                     bundle.putInt("position", position);
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();

@@ -36,7 +36,6 @@ public class IntroActivity extends AppCompatActivity {
 
     private TextView textView;
     private Button button;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +50,6 @@ public class IntroActivity extends AppCompatActivity {
 
         textView = (TextView)findViewById(R.id.textView);
         button = (Button)findViewById(R.id.buttonGone);
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
 
         checkIfPermissionGranted();
     }
@@ -258,9 +255,6 @@ public class IntroActivity extends AppCompatActivity {
                     //Make MediaScanner scan the existing files in StatusManager/Saved
                     makeMediaScan();
 
-
-                    progressBar.setVisibility(View.INVISIBLE);
-
                     //First time continue button
                     button.setText(getResources().getString(R.string.continue_to));
                     button.setVisibility(View.VISIBLE);
@@ -275,35 +269,9 @@ public class IntroActivity extends AppCompatActivity {
 
                 }
                 else{
-                    progressBar.setVisibility(View.VISIBLE);
-                    final int totalProgressTime = 100;
-                    final Thread t = new Thread() {
-                        @Override
-                        public void run() {
-                            int jumpTime = 0;
-
-                            while(jumpTime < totalProgressTime) {
-                                try {
-                                    sleep(50);
-                                    jumpTime += 5;
-                                    progressBar.setProgress(jumpTime);
-                                } catch (InterruptedException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    };
-                    t.start();
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
-                            finish();
-                            startActivity(intent);
-                        }
-                    },1300);
+                    Intent intent = new Intent(IntroActivity.this, ViewActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
                 Log.d("Shared pref try", "");
             }
