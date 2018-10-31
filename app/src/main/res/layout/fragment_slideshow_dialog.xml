@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="fragments.SlideshowDialogFragment">
 
-    <android.support.v4.view.ViewPager
+    <helpers.ViewPagerFixed
         android:id="@+id/viewpagerss"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +27,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:textStyle="bold" />
@@ -38,7 +39,7 @@
             android:layout_marginRight="10dp"
             android:visibility="gone"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_action_love_red" />
+            android:background="@drawable/ic_action_broken_heart" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
             android:id="@+id/imageLoveButton"
             android:layout_toLeftOf="@+id/imageShareButton"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:background="@drawable/ic_action_love" />
         <ImageButton
             android:layout_width="wrap_content"
@@ -77,28 +79,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/detailsLinearLayout"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="vertical"
         android:layout_marginBottom="30dp"
-        android:padding="20dp">
+        android:padding="30dp">
 
         <TextView
             android:id="@+id/titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:textColor="@android:color/white" />
 
     </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-4525583199746587/8182378362">
+    </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

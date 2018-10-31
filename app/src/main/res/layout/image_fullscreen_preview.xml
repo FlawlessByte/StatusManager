@@ -13,12 +13,31 @@
         android:visibility="gone"
         android:scaleType="fitCenter"/>
 
-    <VideoView
-        android:id="@+id/video_preview"
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:scaleType="fitCenter" />
+        android:id="@+id/frameLayout"
+        android:scaleType="fitCenter">
+
+        <VideoView
+            android:id="@+id/video_preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:scaleType="fitCenter" />
+
+
+    </FrameLayout>
+
+    <!--<VideoView-->
+        <!--android:id="@+id/video_preview"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="gone"-->
+        <!--android:scaleType="fitCenter" />-->
 
 </RelativeLayout>

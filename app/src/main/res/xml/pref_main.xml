@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/general">
+        <!--<CheckBoxPreference-->
+            <!--android:defaultValue="false"-->
+            <!--android:key="key_auto_download"-->
+            <!--android:enabled="false"-->
+            <!--android:summary="Automatically download new statuses to your storage"-->
+            <!--android:title="Auto Download" />-->
+
+
+        <PreferenceScreen
+            android:summary="@string/clean_up"
+            android:title="@string/free_up">
+            <PreferenceCategory android:title="@string/free_up">
+                <Preference
+                    android:selectable="false"
+                    android:summary="@string/free_whatsapp_summary1" />
+                <Preference
+                    android:selectable="false"
+                    android:summary="@string/free_whatsapp_summary2" />
+
+                <Preference android:selectable="false"/>
+                <Preference
+                    android:key="key_free_whatsapp_fold"
+                    android:title="@string/click_here_to_clean" />
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory android:title="Notifications">-->
+        <!--<SwitchPreference-->
+            <!--android:defaultValue="false"-->
+            <!--android:enabled="false"-->
+            <!--android:key="notifications_new_message"-->
+            <!--android:title="Enable notifications"-->
+            <!--android:summary="Enable notifications for new statuses"/>-->
+
+    <!--</PreferenceCategory>-->
+
+
+    <PreferenceCategory android:title="@string/about">
+
+    <Preference
+        android:selectable="false"
+        android:summary="@string/about_pref" />
+
+    <Preference
+        android:summary="1.2"
+        android:title="@string/version" />
+
+    <Preference
+        android:key="key_feedback"
+        android:summary="@string/feedback_summary"
+        android:title="@string/send_feedback" />
+
+    <Preference
+        android:key="key_rate_app"
+        android:summary="@string/rate_app_summary"
+        android:title="@string/rate_app" />
+
+    <Preference
+        android:key="key_video_ad"
+        android:summary="@string/watch_ad_summary"
+        android:title="@string/watch_ad_title" />
+
+    </PreferenceCategory>
+
+
+
+</PreferenceScreen>

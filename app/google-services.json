@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "59959750828",
+    "firebase_url": "https://statussaver-a6c80.firebaseio.com",
+    "project_id": "statussaver-a6c80",
+    "storage_bucket": "statussaver-a6c80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59959750828:android:e016ff46ffcb32de",
+        "android_client_info": {
+          "package_name": "co.realinventor.statusmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59959750828-bpn57e9b9rfe75k72ec4jmgphm9q2qsk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.realinventor.statusmanager",
+            "certificate_hash": "ee69fb920bf87d4e0ee724af65130c07b6fe8182"
+          }
+        },
+        {
+          "client_id": "59959750828-4arp11kn8tlv69scl2m4i0sh042tvpl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5uKtuvsTMjJbFPB21-vvuwva12ch6Obc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "59959750828-4arp11kn8tlv69scl2m4i0sh042tvpl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

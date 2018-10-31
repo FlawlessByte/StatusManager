@@ -9,8 +9,4 @@ import java.io.FileInputStream;
 
 public class Favourites {
     public final static String FAV_FILENAME = "fav_files.txt";
-
-    public static void addFav(String fav){
-//        FileInputStream file = openFileInput(fav);
-    }
 }

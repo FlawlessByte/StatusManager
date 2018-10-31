@@ -15,6 +15,36 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    </style>
+
+
+    <style name="AppTheme.AdAttribution">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:text">Ad</item>
+        <item name="android:background">#FFCC66</item>
+        <item name="android:width">15dp</item>
+        <item name="android:height">15dp</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">#00397F</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:background">#f5f5f5</item>
+    </style>
+
+
+
+    <style name="PreferencesTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:cacheColorHint">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#000</item>
+        <item name="android:textColorSecondary">#777</item>
+    </style>
+
 
 </resources>
