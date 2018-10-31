@@ -1,2 +1,2 @@
 # StatusManager
-Status Manager App for android
+Status Manager App for android.
