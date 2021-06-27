@@ -57,4 +57,11 @@
     <string name="about">sobre nosotros</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="video_not_loaded">El video publicitario aún no se ha cargado</string>
+    <string name="retry">Rever</string>
+    <string name="share_using">Compartirlo usando</string>
+    <string name="share">Compartir</string>
+    <string name="share_summary">Si te gustó esta aplicación, ¡compártela con tus amigos!</string>
+    <string name="privacy">Política de privacidad</string>
+    <string name="privacy_summary">Toca para conocer la política de privacidad de la aplicación.</string>
+
 </resources>

@@ -25,7 +25,9 @@ public class MediaFiles {
     public static ArrayList<String> savedImageFiles = new ArrayList<>();
     public static ArrayList<String> savedFiles = new ArrayList<>();
     private static String APP_FOLDER_NAME = "StatusManager";
-    public static String WHATSAPP_STATUS_FOLDER_PATH = Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/";
+    public static String WHATSAPP_STATUS_FOLDER_PATH = "";
+    public static String WHATSAPP_STATUS_FOLDER_PATH_OLD = Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/";
+    public static String WHATSAPP_STATUS_FOLDER_PATH_NEW = Environment.getExternalStorageDirectory() + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses/";
     public static final String DOWNLOADED_IMAGE_PATH = Environment.getExternalStorageDirectory()+"/"+APP_FOLDER_NAME+"/Saved/";
 
 
@@ -77,16 +79,17 @@ public class MediaFiles {
 
         File[] files = directory.listFiles();
 //        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
-        {
-            if(files[i].getName().endsWith(".mp4") || files[i].getName().endsWith(".jpg")){
-                savedFiles.add(files[i].getName());
-            }
-            if(files[i].getName().endsWith(".mp4")){
-                savedVideoFiles.add(files[i].getName());
-            }
-            if(files[i].getName().endsWith(".jpg")){
-                savedImageFiles.add(files[i].getName());
+        if (files.length > 0) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().endsWith(".mp4") || files[i].getName().endsWith(".jpg")) {
+                    savedFiles.add(files[i].getName());
+                }
+                if (files[i].getName().endsWith(".mp4")) {
+                    savedVideoFiles.add(files[i].getName());
+                }
+                if (files[i].getName().endsWith(".jpg")) {
+                    savedImageFiles.add(files[i].getName());
+                }
             }
         }
 
@@ -106,15 +109,21 @@ public class MediaFiles {
 
     public static boolean doesWhatsappDirExist(){
         File dir = new File(WHATSAPP_STATUS_FOLDER_PATH);
-        if(dir.exists() && dir.isDirectory()) {
-            return true;
-        }
-        else{
+        if (!dir.exists() || !dir.isDirectory()) {
             return false;
         }
+        return true;
     }
 
-    public static void initAppDirectrories(){
+    public static boolean checkIfDirExists(String path){
+        File dir = new File(path);
+        if (!dir.exists() || !dir.isDirectory()) {
+            return false;
+        }
+        return true;
+    }
+
+    public static void initAppDirectories(){
         File dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME);
         if(dir.exists() && dir.isDirectory()) {
             dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Saved");
@@ -126,6 +135,15 @@ public class MediaFiles {
             dir.mkdir();
             dir = new File(Environment.getExternalStorageDirectory() + "/" +APP_FOLDER_NAME + "/Saved");
             dir.mkdir();
+        }
+    }
+
+    public static void initWhatsAppDirPath(){
+        if(checkIfDirExists(WHATSAPP_STATUS_FOLDER_PATH_NEW)){
+            WHATSAPP_STATUS_FOLDER_PATH = WHATSAPP_STATUS_FOLDER_PATH_NEW;
+        }
+        else {
+            WHATSAPP_STATUS_FOLDER_PATH = WHATSAPP_STATUS_FOLDER_PATH_OLD;
         }
     }
 

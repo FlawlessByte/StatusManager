@@ -57,4 +57,10 @@
     <string name="watch_ad_title">Annoiarsi? O felice?</string>
     <string name="about">Riguardo a noi</string>
     <string name="video_not_loaded">Il video pubblicitario non è ancora stato caricato</string>
+    <string name="retry">Riprovare</string>
+    <string name="share_using">Condividi usando</string>
+    <string name="share">Condividere</string>
+    <string name="share_summary">Se ti è piaciuta questa applicazione, condividila con i tuoi amici!</string>
+    <string name="privacy">Politica sulla riservatezza</string>
+    <string name="privacy_summary">Tocca per conoscere le norme sulla privacy della app.</string>
 </resources>

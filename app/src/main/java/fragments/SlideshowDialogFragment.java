@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,6 +70,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private ViewGroup cont;
     private AdView mAdView;
     private AdRequest adRequest;
+    private boolean noAdsUnlocked;
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -81,11 +83,16 @@ public class SlideshowDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_slideshow_dialog, container, false);
         cont = container;
 
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+        noAdsUnlocked = sharedPref.getBoolean("NoAdsUnlocked", false);
+
         mAdView = v.findViewById(R.id.adView);
         adRequest = new AdRequest.Builder()
 //                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
                 .build();
-        mAdView.loadAd(adRequest);
+        if(!noAdsUnlocked) {
+            mAdView.loadAd(adRequest);
+        }
 
         viewPager = (ViewPagerFixed) v.findViewById(R.id.viewpagerss);
         viewPager.setOffscreenPageLimit(0);
@@ -264,7 +271,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         }
         else{
             //Checks if adview is already loaded?
-            if(!AdViewInfo.isSlideShowBannerAlive)
+            if(!AdViewInfo.isSlideShowBannerAlive && !noAdsUnlocked)
                 mAdView.loadAd(adRequest);
             mAdView.setVisibility(View.VISIBLE);
         }

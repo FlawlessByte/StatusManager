@@ -21,10 +21,11 @@
     <string name="try_again">Try again!</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="retry">Retry</string>
 
     <string name="whatsapp_fold_not_exist">It looks like you don\'t have a Whatsapp Status folder in your system!</string>
     <string name="fold_not_found">Could not find Status folder!</string>
-    <string name="gbwhatsapp_stat">We could not find the folder that contains your Status media. This can happen if you don\'t have Whatsapp installed or if you are using GBWhatsapp. Are you using GBWhatsapp?</string>
+    <string name="gbwhatsapp_stat">We could not find the folder that contains your Status media. This can happen if you don\'t have Whatsapp installed.</string>
     <string name="no_whatsapp">I don\'t have Whatsapp</string>
     <string name="app_cannot_work">This application cannot work unless you have Whatsapp installed!</string>
 
@@ -79,5 +80,10 @@
     <string name="watch_ad_summary">Watch a video ad if you got some time.</string>
     <string name="watch_ad_title">Feeling bored? Or happy?</string>
     <string name="about">About</string>
+    <string name="share_using">Share using</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="privacy_summary">Tap to know about the app\'s privacy policy.</string>
+    <string name="share">Share</string>
+    <string name="share_summary">If you liked this application, share it with your friends!</string>
 
 </resources>

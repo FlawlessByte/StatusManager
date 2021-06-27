@@ -57,4 +57,10 @@
     <string name="watch_ad_title">Чувствуя скучно? Или счастливым?</string>
     <string name="about">о нас</string>
     <string name="video_not_loaded">Рекламное видео еще не загружено</string>
+    <string name="retry">повторить попытку</string>
+    <string name="share_using">Поделитесь им, используя</string>
+    <string name="share">Поделиться</string>
+    <string name="share_summary">Если вам понравилось это приложение, поделитесь им со своими друзьями!</string>
+    <string name="privacy">политика конфиденциальности</string>
+    <string name="privacy_summary">Нажмите, чтобы узнать о политике конфиденциальности приложения.</string>
 </resources>

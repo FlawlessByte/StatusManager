@@ -57,4 +57,10 @@
     <string name="watch_ad_title">Voel verveeld? Of gelukkig?</string>
     <string name="about">oor ons</string>
     <string name="video_not_loaded">Advertensie video is nog nie gelaai nie</string>
+    <string name="retry">Probeer weer</string>
+    <string name="share_using">Deel dit met behulp van</string>
+    <string name="share">Share</string>
+    <string name="share_summary">As jy van hierdie aansoek hou, deel dit saam met jou vriende!</string>
+    <string name="privacy">Privaatheidsbeleid</string>
+    <string name="privacy_summary">Tik om te weet van die program se privaatheidsbeleid.</string>
 </resources>

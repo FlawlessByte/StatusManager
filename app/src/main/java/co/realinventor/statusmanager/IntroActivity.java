@@ -43,7 +43,8 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
 
         SharedPreferences shared = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
-        MediaFiles.WHATSAPP_STATUS_FOLDER_PATH = shared.getString("WHATSAPP_STATUS_FOLD_PATH",Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/");
+//        MediaFiles.WHATSAPP_STATUS_FOLDER_PATH = shared.getString("WHATSAPP_STATUS_FOLD_PATH",Environment.getExternalStorageDirectory()+"/Whatsapp/Media/.Statuses/");
+        MediaFiles.initWhatsAppDirPath();
 
         //Admob initialization
         MobileAds.initialize(this, "ca-app-pub-4525583199746587~9357637931");
@@ -195,36 +196,36 @@ public class IntroActivity extends AppCompatActivity {
             //Check if GBWhatsapp
             AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this, R.style.AlertDialogCustom);
             builder.setTitle(getResources().getString(R.string.fold_not_found));
-            builder.setMessage(getResources().getString(R.string.gbwhatsapp_stat));
-            builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            builder.setMessage(getResources().getString(R.string.whatsapp_fold_not_exist));
+            builder.setPositiveButton(getResources().getString(R.string.retry), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
 
-                    SharedPreferences sharedPref = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
-                    //Change the value to false
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("WHATSAPP_STATUS_FOLD_PATH", Environment.getExternalStorageDirectory()+"/GBWhatsapp/Media/.Statuses/");
-                    editor.apply();
+//                    SharedPreferences sharedPref = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+//                    //Change the value to false
+//                    SharedPreferences.Editor editor = sharedPref.edit();
+//                    editor.putString("WHATSAPP_STATUS_FOLD_PATH", Environment.getExternalStorageDirectory()+"/GBWhatsapp/Media/.Statuses/");
+//                    editor.apply();
 
                     Intent intent = new Intent(getApplication(), IntroActivity.class);
                     startActivity(intent);
 
                 }
             });
-            builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
             });
-            builder.setNeutralButton(getResources().getString(R.string.no_whatsapp), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Toast.makeText(getApplication(), getResources().getString(R.string.app_cannot_work), Toast.LENGTH_SHORT).show();
-                }
-            });
+//            builder.setNeutralButton(getResources().getString(R.string.no_whatsapp), new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    dialogInterface.dismiss();
+//                    Toast.makeText(getApplication(), getResources().getString(R.string.app_cannot_work), Toast.LENGTH_SHORT).show();
+//                }
+//            });
             builder.show();
 
         }
@@ -302,7 +303,7 @@ public class IntroActivity extends AppCompatActivity {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
                         Log.v("MediaScanner ",
-                                "file " + path + " was scanned seccessfully: " + uri);
+                                "file " + path + " was scanned successfully: " + uri);
                     }
                 });
     }

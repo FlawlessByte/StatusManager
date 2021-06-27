@@ -2,33 +2,18 @@ package co.realinventor.statusmanager;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 import helpers.MediaFiles;
 
@@ -48,7 +33,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
 
 
-    public static class MainPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,RewardedVideoAdListener{
+    public static class MainPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
         final String AUTODOWNLOAD_KEY = "key_auto_download";
         final String NOTIFICATION_KEY = "notifications_new_message";
@@ -56,26 +41,74 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
         final String RATE_APP_KEY = "key_rate_app";
         final String REWARDED_VIDEO_KEY = "key_video_ad";
         final String FREE_WHATSAPP_FOLD_KEY = "key_free_whatsapp_fold";
+        final String PRIVACY_POLICY_KEY = "key_privacy";
+        final String SHARE_KEY = "key_share";
+        final String SECRET_KEY = "key_secret";
         private RewardedVideoAd mRewardedVideoAd;
+        private int secretTapCount = 0;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_main);
 
-            // Use an activity context to get the rewarded video instance.
-            mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
-            mRewardedVideoAd.setRewardedVideoAdListener(this);
-
-            mRewardedVideoAd.loadAd("ca-app-pub-4525583199746587/6934978941",
-                    new AdRequest.Builder()
-//                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
-                            .build());
+//            // Use an activity context to get the rewarded video instance.
+//            mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
+//            mRewardedVideoAd.setRewardedVideoAdListener(this);
+//
+//            mRewardedVideoAd.loadAd("ca-app-pub-4525583199746587/6934978941",
+//                    new AdRequest.Builder()
+////                            .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                            .build());
 
             Preference feedPref = findPreference(FEEDBACK_KEY);
             Preference ratePref = findPreference(RATE_APP_KEY);
-            Preference rewardPref = findPreference(REWARDED_VIDEO_KEY);
+//            Preference rewardPref = findPreference(REWARDED_VIDEO_KEY);
             Preference freePref = findPreference(FREE_WHATSAPP_FOLD_KEY);
+            Preference sharePref = findPreference(SHARE_KEY);
+            Preference privacyPolicyKey = findPreference(PRIVACY_POLICY_KEY);
+            Preference versionPref = findPreference("");
+
+            versionPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Log.i("VersionPref", "clicked");
+                    if(++secretTapCount == 10){
+                        // Unlock NoAds, and Toast
+                        String MSG = "You have unlocked the Ad free experience! Thanks for being the my most favourite customer!";
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+                        //Change the value to true
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putBoolean("NoAdsUnlocked", true);
+                        editor.apply();
+                        Toast.makeText(getActivity(), MSG, Toast.LENGTH_LONG).show();
+                    }
+                    else if(secretTapCount > 6 && secretTapCount < 10){
+                        String MSG = "You are " + (10 - secretTapCount) + " steps away from unlocking Ad free XP!";
+                        Toast.makeText(getActivity(), MSG, Toast.LENGTH_SHORT).show();
+                    }
+                    Log.i("VersionPref", ""+secretTapCount);
+                    return false;
+                }
+            });
+
+            privacyPolicyKey.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Log.d("Pref", "privacy pref");
+                    getActivity().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://realinventor.github.io/StatusSaver/privacy.html")));
+                    return false;
+                }
+            });
+            sharePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Log.d("Pref", "share pref");
+                    shareApplication(getActivity());
+                    return false;
+                }
+            });
+
             feedPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -93,20 +126,20 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
                     return false;
                 }
             });
-            rewardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Log.d("Pref", "Rewarded video");
-                    if (mRewardedVideoAd.isLoaded()) {
-                        mRewardedVideoAd.show();
-                    }
-                    else {
-                        Log.d("Pref", "Rewarded video not loaded");
-                        Toast.makeText(getActivity(),getResources().getString(R.string.video_not_loaded),Toast.LENGTH_SHORT).show();
-                    }
-                    return false;
-                }
-            });
+//            rewardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    Log.d("Pref", "Rewarded video");
+//                    if (mRewardedVideoAd.isLoaded()) {
+//                        mRewardedVideoAd.show();
+//                    }
+//                    else {
+//                        Log.d("Pref", "Rewarded video not loaded");
+//                        Toast.makeText(getActivity(),getResources().getString(R.string.video_not_loaded),Toast.LENGTH_SHORT).show();
+//                    }
+//                    return false;
+//                }
+//            });
 
             freePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -189,31 +222,31 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
         }
 
 
-        @Override
-        public void onRewarded(RewardItem reward) {
-            Toast.makeText(getActivity(),getResources().getString(R.string.thank_you),Toast.LENGTH_SHORT).show();
-            // Reward the user.
-        }
+//        @Override
+//        public void onRewarded(RewardItem reward) {
+//            Toast.makeText(getActivity(),getResources().getString(R.string.thank_you),Toast.LENGTH_SHORT).show();
+//            // Reward the user.
+//        }
+//
+//        @Override
+//        public void onRewardedVideoAdLeftApplication() {}
+//
+//        @Override
+//        public void onRewardedVideoAdClosed() {}
 
-        @Override
-        public void onRewardedVideoAdLeftApplication() {}
-
-        @Override
-        public void onRewardedVideoAdClosed() {}
-
-        @Override
-        public void onRewardedVideoAdFailedToLoad(int errorCode) {
-            Toast.makeText(getActivity(),getResources().getString(R.string.sorry_some_error),Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onRewardedVideoAdLoaded() {}
-
-        @Override
-        public void onRewardedVideoAdOpened() {}
-
-        @Override
-        public void onRewardedVideoStarted() {}
+//        @Override
+//        public void onRewardedVideoAdFailedToLoad(int errorCode) {
+//            Toast.makeText(getActivity(),getResources().getString(R.string.sorry_some_error),Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onRewardedVideoAdLoaded() {}
+//
+//        @Override
+//        public void onRewardedVideoAdOpened() {}
+//
+//        @Override
+//        public void onRewardedVideoStarted() {}
     }
 
     @Override
@@ -257,6 +290,14 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
         }
+    }
+
+    public static void shareApplication(Context context) {
+        Intent sharingIntent = new Intent("android.intent.action.SEND");
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra("android.intent.extra.SUBJECT", "Status Saver for WhatsApp");
+        sharingIntent.putExtra("android.intent.extra.TEXT", "Status Saver for WhatsApp- \nPreview, save, & share instantly! \n\nClick on the link to download..\n\nhttp://play.google.com/store/apps/details?id=co.realinventor.statusmanager");
+        context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_using)));
     }
 
 }

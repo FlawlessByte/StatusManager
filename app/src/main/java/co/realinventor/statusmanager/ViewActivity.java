@@ -3,6 +3,7 @@ package co.realinventor.statusmanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
@@ -42,20 +43,28 @@ public class ViewActivity extends AppCompatActivity {
     private ViewPagerFixed mViewPager;
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
+    private boolean noAdsUnlocked;
+    private final String TAG = "ViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
 
-        //Banner ad
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
-                .build();
-        mAdView.loadAd(adRequest);
+        SharedPreferences sharedPref = getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
+        noAdsUnlocked = sharedPref.getBoolean("NoAdsUnlocked", false);
+        Log.i(TAG, "NoAdsUnlocked: "+noAdsUnlocked);
 
-        //Interstial ad
+        if(!noAdsUnlocked) {
+            //Banner ad
+            mAdView = findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+                    .build();
+            mAdView.loadAd(adRequest);
+        }
+
+        //Interstitial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
         mInterstitialAd.loadAd(new AdRequest.Builder()
@@ -64,7 +73,7 @@ public class ViewActivity extends AppCompatActivity {
 
         //Init media files
         MediaFiles.initMediaFiles();
-        MediaFiles.initAppDirectrories();
+        MediaFiles.initAppDirectories();
         MediaFiles.initSavedFiles();
 
         //Title code to handle intent from download tab
@@ -138,39 +147,39 @@ public class ViewActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
 //                        finish();
-                        if (mInterstitialAd.isLoaded()) {
+                        if (mInterstitialAd.isLoaded() && !noAdsUnlocked) {
                             mInterstitialAd.show();
                             mInterstitialAd.setAdListener(new AdListener() {
                                 @Override
                                 public void onAdLoaded() {
                                     // Code to be executed when an ad finishes loading.
-                                    Log.i("Interstial ad", "Loaded");
+                                    Log.i("Interstitial ad", "Loaded");
                                 }
 
                                 @Override
                                 public void onAdFailedToLoad(int errorCode) {
                                     // Code to be executed when an ad request fails.
-                                    Log.i("Interstial ad", "Failed to load");
+                                    Log.e(TAG, "Failed to load Ad: " +errorCode);
                                     finish();
                                 }
 
                                 @Override
                                 public void onAdOpened() {
                                     // Code to be executed when the ad is displayed.
-                                    Log.i("Interstial ad", "Ad opened");
+                                    Log.i("Interstitial ad", "Ad opened");
                                 }
 
                                 @Override
                                 public void onAdLeftApplication() {
                                     // Code to be executed when the user has left the app.
-                                    Log.i("Interstial ad", "User left app");
+                                    Log.i("Interstitial ad", "User left app");
                                     finish();
                                 }
 
                                 @Override
                                 public void onAdClosed() {
                                     // Code to be executed when when the interstitial ad is closed.
-                                    Log.i("Interstial ad", "Ad closed");
+                                    Log.i("Interstitial ad", "Ad closed");
                                     finish();
                                 }
                             });

@@ -57,4 +57,10 @@
     <string name="watch_ad_title">S\'ennuyer? Ou heureux?</string>
     <string name="about">Sur</string>
     <string name="video_not_loaded">La vidéo publicitaire n\'est pas encore chargée</string>
+    <string name="retry">Réessayez</string>
+    <string name="share_using">Partagez-le en utilisant</string>
+    <string name="share">Partager</string>
+    <string name="share_summary">Si vous avez aimé cette application, partagez-la avec vos amis!</string>
+    <string name="privacy">Politique de confidentialité</string>
+    <string name="privacy_summary">Appuyez sur pour connaître la politique de confidentialité de l\'application.</string>
 </resources>

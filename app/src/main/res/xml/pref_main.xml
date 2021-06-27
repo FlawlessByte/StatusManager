@@ -43,28 +43,44 @@
 
     <PreferenceCategory android:title="@string/about">
 
-    <Preference
-        android:selectable="false"
-        android:summary="@string/about_pref" />
+        <Preference
+            android:selectable="false"
+            android:summary="@string/about_pref" />
 
-    <Preference
-        android:summary="1.2"
-        android:title="@string/version" />
+        <Preference
+            android:title="@string/privacy"
+            android:key="key_privacy"
+            android:summary="@string/privacy_summary"/>
 
-    <Preference
-        android:key="key_feedback"
-        android:summary="@string/feedback_summary"
-        android:title="@string/send_feedback" />
+        <Preference
+            android:title="@string/version"
+            android:key="key_version"
+            android:summary="2.0"/>
 
-    <Preference
-        android:key="key_rate_app"
-        android:summary="@string/rate_app_summary"
-        android:title="@string/rate_app" />
+        <Preference
+            android:title="@string/share"
+            android:key="key_share"
+            android:summary="@string/share_summary"/>
 
-    <Preference
-        android:key="key_video_ad"
-        android:summary="@string/watch_ad_summary"
-        android:title="@string/watch_ad_title" />
+        <Preference
+            android:title="@string/rate_app"
+            android:key="key_rate_app"
+            android:summary="@string/rate_app_summary"/>
+
+        <Preference
+            android:title="@string/send_feedback"
+            android:key="key_feedback"
+            android:summary="@string/feedback_summary"/>
+
+<!--        <Preference-->
+<!--            android:title="@string/watch_ad_title"-->
+<!--            android:key="key_video_ad"-->
+<!--            android:summary="@string/watch_ad_summary"/>-->
+
+        <Preference
+            android:title=""
+            android:key="key_secret"
+            android:summary=""/>
 
     </PreferenceCategory>
 
