@@ -9,13 +9,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,9 +31,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import co.realinventor.statusmanager.Helpers.GalleryAdapter;
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.SettingsPrefActivity;
-import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
 
@@ -53,7 +54,7 @@ public class PlaceholderFragment extends Fragment {
     // List of native ads that have been successfully loaded.
     private List<NativeAd> mNativeAds = new ArrayList<>();
     private ArrayList<Image> images;
-    private ArrayList<Object> allObjects;
+    private ArrayList<Image> allObjects;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -132,20 +133,14 @@ public class PlaceholderFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Log.d("Recycler view clicked","Pos "+position);
-
-                if(allObjects.get(position) instanceof NativeAd){
-                    Toast.makeText(getActivity(),"You clicked an ad", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("images", allObjects);
-                    bundle.putString("title", getArguments().getString("title"));
-                    bundle.putInt("position", position);
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
-                    newFragment.setArguments(bundle);
-                    newFragment.show(ft, "slideshow");
-                }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("images", allObjects);
+                bundle.putString("title", getArguments().getString("title"));
+                bundle.putInt("position", position);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                newFragment.setArguments(bundle);
+                newFragment.show(ft, "slideshow");
             }
 
             @Override

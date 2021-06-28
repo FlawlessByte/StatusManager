@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
 
 import helpers.MediaFiles;
 
@@ -44,7 +43,6 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
         final String PRIVACY_POLICY_KEY = "key_privacy";
         final String SHARE_KEY = "key_share";
         final String SECRET_KEY = "key_secret";
-        private RewardedVideoAd mRewardedVideoAd;
         private int secretTapCount = 0;
 
         @Override
@@ -67,7 +65,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
             Preference freePref = findPreference(FREE_WHATSAPP_FOLD_KEY);
             Preference sharePref = findPreference(SHARE_KEY);
             Preference privacyPolicyKey = findPreference(PRIVACY_POLICY_KEY);
-            Preference versionPref = findPreference("");
+            Preference versionPref = findPreference("key_version");
 
             versionPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

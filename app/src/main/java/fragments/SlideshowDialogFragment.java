@@ -10,9 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +34,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -47,6 +51,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+
+import co.realinventor.statusmanager.GlideApp;
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.ViewActivity;
 import helpers.AdViewInfo;
@@ -54,6 +60,8 @@ import helpers.Favourites;
 import helpers.Image;
 import helpers.MediaFiles;
 import helpers.ViewPagerFixed;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class SlideshowDialogFragment extends DialogFragment {
@@ -71,6 +79,8 @@ public class SlideshowDialogFragment extends DialogFragment {
     private AdView mAdView;
     private AdRequest adRequest;
     private boolean noAdsUnlocked;
+    private final String AD_UNIT_ID_BANNER = "ca-app-pub-4525583199746587/8182378362";
+    private final String TEST_AD_UNIT_ID_BANNER = "ca-app-pub-3940256099942544/6300978111";
 
     static SlideshowDialogFragment newInstance() {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
@@ -86,11 +96,9 @@ public class SlideshowDialogFragment extends DialogFragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("APP_DEFAULTS", Context.MODE_PRIVATE);
         noAdsUnlocked = sharedPref.getBoolean("NoAdsUnlocked", false);
 
-        mAdView = v.findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
-                .build();
         if(!noAdsUnlocked) {
+            mAdView = v.findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
         }
 
@@ -471,9 +479,9 @@ public class SlideshowDialogFragment extends DialogFragment {
 
                 Image image = images.get(position);
 
-                Glide.with(getActivity()).load(image.getLarge())
+                GlideApp.with(getActivity()).load(image.getLarge())
                         .thumbnail(0.5f)
-                        .crossFade()
+                        .transition(withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(photoView);
 

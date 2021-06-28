@@ -4,23 +4,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 
 import co.realinventor.statusmanager.pageradapters.*;
 import helpers.MediaFiles;
@@ -28,12 +38,12 @@ import helpers.ViewPagerFixed;
 
 public class ViewActivity extends AppCompatActivity {
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -45,6 +55,11 @@ public class ViewActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private boolean noAdsUnlocked;
     private final String TAG = "ViewActivity";
+    private final String AD_UNIT_ID_INTERSTITIAL = "ca-app-pub-4525583199746587/1749666103";
+    private final String TEST_AD_UNIT_ID_INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712";
+    private final String AD_UNIT_ID_BANNER = "ca-app-pub-4525583199746587/8362750889";
+    private final String TEST_AD_UNIT_ID_BANNER = "ca-app-pub-3940256099942544/6300978111";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,21 +70,56 @@ public class ViewActivity extends AppCompatActivity {
         noAdsUnlocked = sharedPref.getBoolean("NoAdsUnlocked", false);
         Log.i(TAG, "NoAdsUnlocked: "+noAdsUnlocked);
 
+//        if(!noAdsUnlocked) {
+//            //Banner ad
+//            mAdView = findViewById(R.id.adView);
+//            AdRequest adRequest = new AdRequest.Builder()
+////                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                    .build();
+//            mAdView.loadAd(adRequest);
+//        }
+//
+//        //Interstitial ad
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
+//        mInterstitialAd.loadAd(new AdRequest.Builder()
+////                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
+//                .build());
+
+
+        // new add style
+
+
         if(!noAdsUnlocked) {
-            //Banner ad
             mAdView = findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
-                    .build();
+            AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
+
+
+            AdRequest adRequestInt = new AdRequest.Builder().build();
+
+            // Interstitial Ads
+            InterstitialAd.load(this, AD_UNIT_ID_INTERSTITIAL, adRequestInt,
+                    new InterstitialAdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                            // The mInterstitialAd reference will be null until
+                            // an ad is loaded.
+                            mInterstitialAd = interstitialAd;
+                            Log.i(TAG, "onAdLoaded");
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            // Handle the error
+                            Log.i(TAG, loadAdError.getMessage());
+                            mInterstitialAd = null;
+                        }
+                    });
+
         }
 
-        //Interstitial ad
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-4525583199746587/1749666103");
-        mInterstitialAd.loadAd(new AdRequest.Builder()
-//                .addTestDevice("750C63CE8C1A0106CF1A8A4C5784DC17")
-                .build());
+
 
         //Init media files
         MediaFiles.initMediaFiles();
@@ -147,46 +197,35 @@ public class ViewActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
 //                        finish();
-                        if (mInterstitialAd.isLoaded() && !noAdsUnlocked) {
-                            mInterstitialAd.show();
-                            mInterstitialAd.setAdListener(new AdListener() {
+                        if (mInterstitialAd != null) {
+                            // Callback after showing the Ad
+                            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
                                 @Override
-                                public void onAdLoaded() {
-                                    // Code to be executed when an ad finishes loading.
-                                    Log.i("Interstitial ad", "Loaded");
-                                }
-
-                                @Override
-                                public void onAdFailedToLoad(int errorCode) {
-                                    // Code to be executed when an ad request fails.
-                                    Log.e(TAG, "Failed to load Ad: " +errorCode);
+                                public void onAdDismissedFullScreenContent() {
+                                    // Called when fullscreen content is dismissed.
+                                    Log.d(TAG, "The ad was dismissed.");
                                     finish();
                                 }
 
                                 @Override
-                                public void onAdOpened() {
-                                    // Code to be executed when the ad is displayed.
-                                    Log.i("Interstitial ad", "Ad opened");
-                                }
-
-                                @Override
-                                public void onAdLeftApplication() {
-                                    // Code to be executed when the user has left the app.
-                                    Log.i("Interstitial ad", "User left app");
+                                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                    // Called when fullscreen content failed to show.
+                                    Log.d(TAG, "The ad failed to show.");
                                     finish();
                                 }
 
                                 @Override
-                                public void onAdClosed() {
-                                    // Code to be executed when when the interstitial ad is closed.
-                                    Log.i("Interstitial ad", "Ad closed");
-                                    finish();
+                                public void onAdShowedFullScreenContent() {
+                                    // Called when fullscreen content is shown.
+                                    // Make sure to set your reference to null so you don't
+                                    // show it a second time.
+                                    mInterstitialAd = null;
+                                    Log.d(TAG, "The ad was shown.");
                                 }
                             });
-
-
+                            mInterstitialAd.show(ViewActivity.this);
                         } else {
-                            Log.d("TAG", "The interstitial wasn't loaded yet.");
+                            Log.d(TAG, "The interstitial ad wasn't ready yet.");
                             finish();
                         }
 

@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,8 +33,8 @@ import java.util.Date;
 import java.util.Iterator;
 import co.realinventor.statusmanager.R;
 import co.realinventor.statusmanager.SettingsPrefActivity;
+import co.realinventor.statusmanager.Helpers.GalleryAdapter;
 import helpers.Favourites;
-import helpers.GalleryAdapter;
 import helpers.Image;
 import helpers.MediaFiles;
 
@@ -46,7 +46,7 @@ public class DownViewFragment extends Fragment {
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Image> images;
-    private ArrayList<Object> allObjects;
+    private ArrayList<Image> allObjects;
     private int GRID_COUNT = 3;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -106,7 +106,7 @@ public class DownViewFragment extends Fragment {
 
         images = new ArrayList<>();
         allObjects = new ArrayList<>();
-        mAdapter = new GalleryAdapter(getActivity(),allObjects);
+        mAdapter = new GalleryAdapter(getActivity(), allObjects);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), GRID_COUNT);
 
